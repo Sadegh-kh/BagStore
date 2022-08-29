@@ -5,6 +5,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 /*private val DarkColorPalette = darkColors(
@@ -15,8 +16,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 private val LightColorPalette = lightColors(
     primary = Blue,
-    background = BackgroundMain,
-    surface = CardViewBackground
+    secondary = Blue,
 
     /* Other default colors to override
     background = Color.White,
@@ -30,7 +30,7 @@ private val LightColorPalette = lightColors(
 
 @Composable
 fun MainAppTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
-    val colors= LightColorPalette
+
    /* val colors = if (darkTheme) {
 
     } else {
@@ -38,12 +38,12 @@ fun MainAppTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composabl
     }*/
 
     MaterialTheme(
-        colors = colors,
+        colors = LightColorPalette,
         typography = Typography,
         shapes = Shapes,
         content = content
     )
 
     val systemUiController= rememberSystemUiController()
-    systemUiController.setSystemBarsColor(BackgroundMain)
+    systemUiController.setSystemBarsColor(color = Color.Transparent, darkIcons = false)
 }
