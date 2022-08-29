@@ -1,4 +1,4 @@
-package com.example.bagstore
+package com.example.bagstore.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
