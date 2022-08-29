@@ -10,34 +10,29 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.bagstore.ui.theme.BagStoreTheme
+import com.example.bagstore.ui.theme.MainAppTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            BagStoreTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
-                ) {
-                    Greeting("Android")
-                }
+            MainAppTheme {
+                BagStoreUi()
             }
         }
     }
 }
 
 @Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
+fun BagStoreUi(){
+
 }
+
 
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
-    BagStoreTheme {
-        Greeting("Android")
+    MainAppTheme {
+
     }
 }
