@@ -18,7 +18,7 @@ import com.example.bagstore.ui.theme.Shapes
 
 
 @Composable
-fun IntroScreen() {
+fun IntroScreen(singInClick: () -> Unit, singUpClick: () -> Unit) {
     Image(
         painter = painterResource(id = R.drawable.img_intro),
         contentDescription = null,
@@ -32,18 +32,21 @@ fun IntroScreen() {
         verticalArrangement = Arrangement.Bottom,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        ButtonSign(text = "Sing Up", backgroundColor = Blue, textColor = Color.White)
-        ButtonSign(text = "Sing In", backgroundColor = Color.White, textColor = Blue)
+        ButtonSign(text = "Sing Up", backgroundColor = Blue, textColor = Color.White,singUpClick)
+        ButtonSign(text = "Sing In", backgroundColor = Color.White, textColor = Blue,singInClick)
 
     }
 
 }
 
 @Composable
-fun ButtonSign(text: String, backgroundColor: Color, textColor: Color) {
-
-    Button(onClick = { /*TODO*/ }, colors = ButtonDefaults.buttonColors(backgroundColor),
-    modifier = Modifier.fillMaxWidth(0.78f), shape = Shapes.small) {
+fun ButtonSign(text: String, backgroundColor: Color
+               , textColor: Color
+               , onClickButton: () -> Unit) {
+    Button(
+        onClick = { onClickButton.invoke() }, colors = ButtonDefaults.buttonColors(backgroundColor),
+        modifier = Modifier.fillMaxWidth(0.78f), shape = Shapes.small
+    ) {
 
         Text(text = text, color = textColor)
     }
@@ -58,7 +61,7 @@ fun IntroScreenPreview() {
             modifier = Modifier.fillMaxSize(),
             color = BackgroundMain
         ) {
-            IntroScreen()
+            IntroScreen({}, {})
         }
 
     }

@@ -15,6 +15,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.bagstore.ui.features.IntroScreen
+import com.example.bagstore.ui.features.SingInScreen
+import com.example.bagstore.ui.features.SingUpScreen
 import com.example.bagstore.ui.theme.BackgroundMain
 import com.example.bagstore.ui.theme.MainAppTheme
 import com.example.bagstore.util.MyScreens
@@ -40,25 +42,35 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun BagStoreUi(){
+fun BagStoreUi() {
 
-    val navController= rememberNavController()
-    NavHost(navController = navController, startDestination = MyScreens.IntroScreen.route){
+    val navController = rememberNavController()
+    NavHost(navController = navController, startDestination = MyScreens.IntroScreen.route) {
 
-        composable(MyScreens.MainScreen.route){
+        composable(MyScreens.MainScreen.route) {
             MainScreen()
         }
 
-        composable(MyScreens.IntroScreen.route){
-            IntroScreen()
+        composable(MyScreens.IntroScreen.route) {
+            IntroScreen(singInClick = {
+                navController.navigate(MyScreens.SingInScreen.route)
+            }, singUpClick = {
+                navController.navigate(MyScreens.SingUpScreen.route)
+            })
+        }
+        composable(MyScreens.SingUpScreen.route) {
+            SingUpScreen()
+        }
+        composable(MyScreens.SingInScreen.route) {
+            SingInScreen()
         }
     }
 }
 
 @Composable
-fun MainScreen(){
+fun MainScreen() {
     MainAppTheme {
-        Surface(modifier = Modifier.fillMaxSize()){
+        Surface(modifier = Modifier.fillMaxSize()) {
 
         }
 
