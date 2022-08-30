@@ -15,10 +15,12 @@ import com.example.bagstore.ui.theme.BackgroundMain
 import com.example.bagstore.ui.theme.Blue
 import com.example.bagstore.ui.theme.MainAppTheme
 import com.example.bagstore.ui.theme.Shapes
+import dev.burnoo.cokoin.navigation.getNavController
 
 
 @Composable
 fun IntroScreen(singInClick: () -> Unit, singUpClick: () -> Unit) {
+    val navigation= getNavController()
     Image(
         painter = painterResource(id = R.drawable.img_intro),
         contentDescription = null,

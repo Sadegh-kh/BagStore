@@ -88,4 +88,9 @@ dependencies {
 
     //System Ui Controller=>
     implementation "com.google.accompanist:accompanist-systemuicontroller:0.26.2-beta"
+
+    //Koin in Jetpack Compose =>
+    implementation "dev.burnoo:cokoin:0.3.2"
+    implementation "dev.burnoo:cokoin-android-viewmodel:0.3.2" // for Androidx ViewModel
+    implementation "dev.burnoo:cokoin-android-navigation:0.3.2" // for Compose Navigation
 }
