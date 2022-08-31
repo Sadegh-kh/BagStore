@@ -13,13 +13,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.bagstore.di.myModules
 import com.example.bagstore.ui.features.IntroScreen
-import com.example.bagstore.ui.features.SingInScreen
-import com.example.bagstore.ui.features.SingUpScreen
+import com.example.bagstore.ui.features.singInScreen.SingInScreen
+import com.example.bagstore.ui.features.singUpScreen.SingUpScreen
 import com.example.bagstore.ui.theme.MainAppTheme
 import com.example.bagstore.util.MyScreens
 import dev.burnoo.cokoin.Koin
 import dev.burnoo.cokoin.navigation.KoinNavHost
-import dev.burnoo.cokoin.navigation.getNavController
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
