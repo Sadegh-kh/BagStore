@@ -14,11 +14,13 @@ import androidx.navigation.compose.rememberNavController
 import com.example.bagstore.di.myModules
 import com.example.bagstore.ui.features.IntroScreen
 import com.example.bagstore.ui.features.singInScreen.SingInScreen
+import com.example.bagstore.ui.features.singInScreen.SingInViewModel
 import com.example.bagstore.ui.features.singUpScreen.SingUpScreen
 import com.example.bagstore.ui.theme.MainAppTheme
 import com.example.bagstore.util.MyScreens
 import dev.burnoo.cokoin.Koin
 import dev.burnoo.cokoin.navigation.KoinNavHost
+import dev.burnoo.cokoin.navigation.getNavViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,7 +46,6 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun BagStoreUi() {
-
     val navController = rememberNavController()
     KoinNavHost(navController = navController, startDestination = MyScreens.IntroScreen.route) {
 
@@ -82,6 +83,6 @@ fun MainScreen() {
 @Composable
 fun DefaultPreview() {
     MainAppTheme {
-        BagStoreUi()
+//        BagStoreUi()
     }
 }
