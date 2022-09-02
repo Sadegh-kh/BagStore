@@ -64,10 +64,10 @@ fun CardViewSingUp() {
     //injection
     val navigation = getNavController()
     val viewModel = getNavViewModel<SingInViewModel>()
-    val context= LocalContext.current
+    val context = LocalContext.current
 
-    //when you comeback to  this screen ,it clear fields
-    resetMyStates(viewModel)
+    //when you comeback to this screen ,it clear fields
+    viewModel.resetStates()
 
     Card(
         modifier = Modifier
@@ -94,11 +94,11 @@ fun CardViewSingUp() {
             Button(
                 onClick = {
                     //when you don't write anything and click on button show an error
-                    if (viewModel.emailState.value!!.isEmpty()){
-                        viewModel.errorStateForEmail.value=true
+                    if (viewModel.emailState.value!!.isEmpty()) {
+                        viewModel.errorStateForEmail.value = true
                     }
-                    if (viewModel.passwordState.value!!.isEmpty()){
-                        viewModel.errorStateForPassword.value=true
+                    if (viewModel.passwordState.value!!.isEmpty()) {
+                        viewModel.errorStateForPassword.value = true
                     }
 
                 },
@@ -136,23 +136,14 @@ fun CardViewSingUp() {
     }
 }
 
-fun resetMyStates(viewModel: SingInViewModel) {
-    viewModel.errorStateForPassword.value=false
-    viewModel.errorStateForEmail.value=false
-
-    viewModel.emailState.value=""
-    viewModel.passwordState.value=""
-}
-
-
 @Composable
 fun ColumnInfo(viewModel: SingInViewModel) {
     //states from view model
     val emailState = viewModel.emailState.observeAsState(initial = "")
     val passwordState = viewModel.passwordState.observeAsState(initial = "")
 
-    val emailErrorState=viewModel.errorStateForEmail.observeAsState(initial = false)
-    val passwordErrorState=viewModel.errorStateForPassword.observeAsState(initial = false)
+    val emailErrorState = viewModel.errorStateForEmail.observeAsState(initial = false)
+    val passwordErrorState = viewModel.errorStateForPassword.observeAsState(initial = false)
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -166,17 +157,23 @@ fun ColumnInfo(viewModel: SingInViewModel) {
             hint = "Email",
             icon = R.drawable.ic_email,
             text = emailState.value,
-            textFieldChange = { viewModel.emailState.value = it
-                              viewModel.errorStateForEmail.value=false},
-            error = emailErrorState.value)
+            textFieldChange = {
+                viewModel.emailState.value = it
+                viewModel.errorStateForEmail.value = false
+            },
+            error = emailErrorState.value
+        )
 
         TextFieldPassword(
             hint = "Password",
             icon = R.drawable.ic_password,
             text = passwordState.value,
-            textFieldChange = { viewModel.passwordState.value = it
-                              viewModel.errorStateForPassword.value=false},
-            error = passwordErrorState.value)
+            textFieldChange = {
+                viewModel.passwordState.value = it
+                viewModel.errorStateForPassword.value = false
+            },
+            error = passwordErrorState.value
+        )
     }
 }
 
@@ -184,24 +181,26 @@ fun ColumnInfo(viewModel: SingInViewModel) {
 fun TextFieldInfo(
     hint: String, error: Boolean, icon: Int, text: String, textFieldChange: (String) -> Unit
 ) {
-    Column(modifier = Modifier.padding(bottom = 10.dp)){
+    Column(modifier = Modifier.padding(bottom = 10.dp)) {
         OutlinedTextField(
             label = {
-                val colorTextError=if (error){
+                val colorTextError = if (error) {
                     MaterialTheme.colors.error
-                }else{
+                } else {
                     LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
                 }
-                Text(text = hint, color = colorTextError) },
+                Text(text = hint, color = colorTextError)
+            },
             singleLine = true,
             leadingIcon = {
-                val tintIcon=if (error){
+                val tintIcon = if (error) {
                     ErrorIcon
-                }else{
+                } else {
                     LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
                 }
                 Icon(
-                    painter = painterResource(id = icon), contentDescription = null, tint = tintIcon)
+                    painter = painterResource(id = icon), contentDescription = null, tint = tintIcon
+                )
             },
             modifier = Modifier
                 .wrapContentHeight()
@@ -247,22 +246,24 @@ fun TextFieldPassword(
                 .fillMaxWidth(),
             shape = Shapes.medium,
             label = {
-                val colorTextError=if (error){
+                val colorTextError = if (error) {
                     MaterialTheme.colors.error
-                }else{
+                } else {
                     LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
                 }
-                Text(text = hint, color = colorTextError) },
+                Text(text = hint, color = colorTextError)
+            },
             singleLine = true,
             isError = error,
             leadingIcon = {
-                val tintIcon=if (error){
+                val tintIcon = if (error) {
                     ErrorIcon
-                }else{
+                } else {
                     LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
                 }
                 Icon(
-                    painter = painterResource(id = icon), contentDescription = null, tint = tintIcon)
+                    painter = painterResource(id = icon), contentDescription = null, tint = tintIcon
+                )
             },
 
             //for password visibility
@@ -282,9 +283,9 @@ fun TextFieldPassword(
                 }
 
                 //icon tint for error
-                val tintIcon=if (error){
+                val tintIcon = if (error) {
                     ErrorIcon
-                }else{
+                } else {
                     LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
                 }
                 val description = if (passwordVisibility.value) "Hide Password" else "Show Password"
