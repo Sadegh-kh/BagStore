@@ -1,6 +1,7 @@
 package com.example.bagstore.ui.features.singInScreen
 
-import android.util.Log
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -18,7 +19,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -27,15 +27,12 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewModelScope
 import com.example.bagstore.R
 import com.example.bagstore.ui.theme.*
 import com.example.bagstore.util.MyScreens
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.example.bagstore.util.NetworkChecker
 import dev.burnoo.cokoin.navigation.getNavController
 import dev.burnoo.cokoin.navigation.getNavViewModel
-import okio.Closeable
-import java.nio.channels.AsynchronousChannel
 
 @Composable
 fun SingInScreen() {
@@ -93,14 +90,7 @@ fun CardViewSingUp() {
 
             Button(
                 onClick = {
-                    //when you don't write anything and click on button show an error
-                    if (viewModel.emailState.value!!.isEmpty()) {
-                        viewModel.errorStateForEmail.value = true
-                    }
-                    if (viewModel.passwordState.value!!.isEmpty()) {
-                        viewModel.errorStateForPassword.value = true
-                    }
-
+                    checkFields(viewModel,context)
                 },
                 modifier = Modifier
                     .padding(top = 14.dp, bottom = 7.dp),
@@ -133,6 +123,25 @@ fun CardViewSingUp() {
 
         }
 
+    }
+}
+
+fun checkFields(viewModel: SingInViewModel, context: Context) {
+    //when you don't write anything and click on button show an error
+    val emptyEmailField = viewModel.emailState.value!!.isEmpty()
+    val emptyPasswordField = viewModel.passwordState.value!!.isEmpty()
+
+    val networkChecker = NetworkChecker(context)
+
+    if (emptyEmailField) {
+        viewModel.errorStateForEmail.value = true
+    }
+    if (emptyPasswordField) {
+        viewModel.errorStateForPassword.value = true
+    }
+    //check not connected
+    if (!networkChecker.isInternetConnected && !emptyEmailField && !emptyPasswordField) {
+        Toast.makeText(context, " check your connection !! ", Toast.LENGTH_SHORT).show()
     }
 }
 

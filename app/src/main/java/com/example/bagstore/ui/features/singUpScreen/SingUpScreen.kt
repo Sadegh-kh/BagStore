@@ -1,5 +1,7 @@
 package com.example.bagstore.ui.features.singUpScreen
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -18,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -32,6 +35,7 @@ import com.example.bagstore.ui.theme.Blue
 import com.example.bagstore.ui.theme.ErrorIcon
 import com.example.bagstore.ui.theme.Shapes
 import com.example.bagstore.util.MyScreens
+import com.example.bagstore.util.NetworkChecker
 import dev.burnoo.cokoin.navigation.getNavController
 import dev.burnoo.cokoin.navigation.getNavViewModel
 
@@ -63,10 +67,9 @@ fun SingUpScreen() {
         )
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceEvenly,
+            verticalArrangement = Arrangement.Top,
             modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(0.9f)
+                .fillMaxSize()
         ) {
             ShapeImage()
             CardViewSingUp()
@@ -82,12 +85,15 @@ fun CardViewSingUp() {
     val navigation = getNavController()
     val viewModel = getNavViewModel<SingUpViewModel>()
 
+    val context= LocalContext.current
+
     viewModel.resetStates()
 
     Card(
         modifier = Modifier
             .wrapContentHeight()
-            .fillMaxWidth(0.9f),
+            .fillMaxWidth(0.9f)
+            .padding(bottom = 20.dp),
         shape = Shapes.small,
         elevation = 6.dp
     ) {
@@ -108,7 +114,7 @@ fun CardViewSingUp() {
 
             Button(
                 onClick = {
-                    checkFields(viewModel)
+                    checkFields(viewModel,context)
                 },
                 modifier = Modifier
                     .padding(top = 14.dp, bottom = 7.dp),
@@ -351,7 +357,7 @@ fun ShapeImage() {
     Box(
         modifier = Modifier
             .wrapContentSize()
-            .padding(bottom = 8.dp, top = 8.dp)
+            .padding(bottom = 8.dp)
             .clip(CircleShape)
             .background(BackgroundMain), contentAlignment = Alignment.Center
     ) {
@@ -404,7 +410,7 @@ fun SingUpScreenPreview() {
 }
 
 
-fun checkFields(viewModel: SingUpViewModel) {
+fun checkFields(viewModel: SingUpViewModel, context: Context) {
     //when you don't write anything and click on button show an error
     if (viewModel.nameState.value!!.isEmpty()) {
         viewModel.errorStateForName.value = true
@@ -419,11 +425,27 @@ fun checkFields(viewModel: SingUpViewModel) {
     if (viewModel.configPasswordState.value!!.isEmpty()) {
         viewModel.errorStateForConfigPassword.value = true
     } else {
-        //check to same password
+        //checking to same password
         if (viewModel.passwordState.value != viewModel.configPasswordState.value) {
             viewModel.errorStateForConfigPassword.value = true
         }
+
+        //check if name and email fields are complete and isn't connected show me a massage
+        //and it's in there because password fields are complete and they are same,
+        //can show me that
+        else{
+            val errorStateList= (viewModel.errorStateForName.value!! &&
+                    viewModel.errorStateForEmail.value!! )
+
+            val networkChecker=NetworkChecker(context)
+            if (!networkChecker.isInternetConnected && !errorStateList){
+                Toast.makeText(context, "check your connection !! ", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+
     }
+
 }
 
 

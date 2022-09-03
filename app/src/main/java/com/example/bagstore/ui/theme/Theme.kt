@@ -46,6 +46,5 @@ fun MainAppTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composabl
     )
 
     val systemUiController= rememberSystemUiController()
-    systemUiController.setStatusBarColor(color = Color.Transparent, darkIcons = false)
-    systemUiController.setNavigationBarColor(color = Color.Black,darkIcons = true)
+    systemUiController.setStatusBarColor(color = Blue, darkIcons = false)
 }

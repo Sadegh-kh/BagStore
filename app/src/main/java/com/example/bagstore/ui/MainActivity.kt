@@ -25,10 +25,10 @@ import dev.burnoo.cokoin.navigation.getNavViewModel
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        window.setFlags(
+        /*window.setFlags(
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-        )
+        )*/
         setContent {
             Koin(appDeclaration = { modules(myModules)}) {
                 MainAppTheme {
