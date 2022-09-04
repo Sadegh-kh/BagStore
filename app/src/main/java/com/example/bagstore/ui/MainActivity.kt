@@ -21,6 +21,7 @@ import com.example.bagstore.util.MyScreens
 import dev.burnoo.cokoin.Koin
 import dev.burnoo.cokoin.navigation.KoinNavHost
 import dev.burnoo.cokoin.navigation.getNavViewModel
+import org.koin.android.ext.koin.androidContext
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,7 +31,9 @@ class MainActivity : ComponentActivity() {
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
         )*/
         setContent {
-            Koin(appDeclaration = { modules(myModules)}) {
+            Koin(appDeclaration = {
+                androidContext(this@MainActivity)
+                modules(myModules)}) {
                 MainAppTheme {
                     Surface(
                         modifier = Modifier.fillMaxSize()

@@ -3,8 +3,9 @@ package com.example.bagstore.ui.features.singUpScreen
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.bagstore.model.repository.user.UserRepository
 
-class SingUpViewModel : ViewModel() {
+class SingUpViewModel(private val userRepository: UserRepository) : ViewModel() {
     val nameState = MutableLiveData("")
     val emailState = MutableLiveData("")
     val passwordState = MutableLiveData("")
@@ -26,4 +27,5 @@ class SingUpViewModel : ViewModel() {
         errorStateForPassword.value = false
         errorStateForConfigPassword.value = false
     }
+
 }
