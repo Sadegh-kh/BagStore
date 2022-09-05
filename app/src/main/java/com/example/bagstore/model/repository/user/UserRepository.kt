@@ -3,13 +3,13 @@ package com.example.bagstore.model.repository.user
 interface UserRepository {
 
     //online methods =>
-    suspend fun singUp(name:String,emailAddress:String,password:String): String
-    suspend fun singIn(emailAddress: String,password: String): String
+    suspend fun signUp(name:String, emailAddress:String, password:String): String
+    suspend fun signIn(emailAddress: String, password: String): String
 
 
     //offline methods =>
     //remove token and email address from Shared Preferences
-    fun singOut()
+    fun signOut()
     //load token from Shared Preferences and caching
     fun loadToken()
 

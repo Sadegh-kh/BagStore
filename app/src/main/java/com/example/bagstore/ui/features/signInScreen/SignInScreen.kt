@@ -1,4 +1,4 @@
-package com.example.bagstore.ui.features.singInScreen
+package com.example.bagstore.ui.features.signInScreen
 
 import android.content.Context
 import android.widget.Toast
@@ -36,7 +36,7 @@ import dev.burnoo.cokoin.navigation.getNavController
 import dev.burnoo.cokoin.navigation.getNavViewModel
 
 @Composable
-fun SingInScreen() {
+fun SignInScreen() {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
         Box(
             modifier = Modifier
@@ -61,7 +61,7 @@ fun SingInScreen() {
 fun CardViewSingUp() {
     //injection
     val navController = getNavController()
-    val viewModel = getNavViewModel<SingInViewModel>()
+    val viewModel = getNavViewModel<SignInViewModel>()
     val context = LocalContext.current
 
     //when you comeback to this screen ,it clear fields
@@ -80,7 +80,7 @@ fun CardViewSingUp() {
         ) {
 
             Text(
-                text = "Sing Up",
+                text = "Sign Up",
                 color = Blue,
                 fontSize = 30.sp,
                 fontWeight = FontWeight.Bold,
@@ -94,7 +94,7 @@ fun CardViewSingUp() {
                     checkFields(viewModel,context)
                     val errorResult=errorStates(viewModel,context)
                     if (!errorResult){
-                        viewModel.singIn {
+                        viewModel.signIn {
                            if (it== VALUE_SUCCESS){
                                navController.navigate(MyScreens.MainScreen.route){
                                    popUpTo(MyScreens.IntroScreen.route){
@@ -143,7 +143,7 @@ fun CardViewSingUp() {
     }
 }
 
-fun errorStates(viewModel: SingInViewModel, context: Context): Boolean {
+fun errorStates(viewModel: SignInViewModel, context: Context): Boolean {
     val errorStateEmail=viewModel.errorStateForEmail.value!!
     val errorStatePassword=viewModel.errorStateForPassword.value!!
     val netDisconnected=!NetworkChecker(context).isInternetConnected
@@ -151,7 +151,7 @@ fun errorStates(viewModel: SingInViewModel, context: Context): Boolean {
     return (errorStateEmail||errorStatePassword||netDisconnected)
 }
 
-fun checkFields(viewModel: SingInViewModel, context: Context) {
+fun checkFields(viewModel: SignInViewModel, context: Context) {
     //when you don't write anything and click on button show an error
     val emptyEmailField = viewModel.emailState.value!!.isEmpty()
     val emptyPasswordField = viewModel.passwordState.value!!.isEmpty()
@@ -171,7 +171,7 @@ fun checkFields(viewModel: SingInViewModel, context: Context) {
 }
 
 @Composable
-fun ColumnInfo(viewModel: SingInViewModel) {
+fun ColumnInfo(viewModel: SignInViewModel) {
     //states from view model
     val emailState = viewModel.emailState.observeAsState(initial = "")
     val passwordState = viewModel.passwordState.observeAsState(initial = "")

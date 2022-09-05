@@ -13,7 +13,7 @@ class UserRepositoryImp(
     private val apiService: ApiService,
     private val sharedPreferences: SharedPreferences
 ) : UserRepository {
-    override suspend fun singUp(name: String, emailAddress: String, password: String): String {
+    override suspend fun signUp(name: String, emailAddress: String, password: String): String {
         val userJsonObject = JsonObject().apply {
             addProperty(JsonProperty.NAME, name)
             addProperty(JsonProperty.EMAIL, emailAddress)
@@ -30,7 +30,7 @@ class UserRepositoryImp(
         }
     }
 
-    override suspend fun singIn(emailAddress: String, password: String): String {
+    override suspend fun signIn(emailAddress: String, password: String): String {
         val userJsonObject = JsonObject().apply {
             addProperty(JsonProperty.EMAIL, emailAddress)
             addProperty(JsonProperty.PASSWORD, password)
@@ -47,7 +47,7 @@ class UserRepositoryImp(
     }
 
     //remove user but on server will be exist
-    override fun singOut() {
+    override fun signOut() {
         TokenInMemory.refreshToken(null, null)
         sharedPreferences.edit().clear().apply()
     }

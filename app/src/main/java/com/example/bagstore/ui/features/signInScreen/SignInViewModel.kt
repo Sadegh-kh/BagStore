@@ -1,13 +1,14 @@
-package com.example.bagstore.ui.features.singInScreen
+package com.example.bagstore.ui.features.signInScreen
 
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.bagstore.model.repository.user.UserRepository
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
-class SingInViewModel(private val userRepository: UserRepository) : ViewModel() {
+class SignInViewModel(private val userRepository: UserRepository) : ViewModel() {
 
     val emailState = MutableLiveData("")
     val passwordState = MutableLiveData("")
@@ -23,9 +24,9 @@ class SingInViewModel(private val userRepository: UserRepository) : ViewModel() 
         errorStateForEmail.value = false
     }
 
-    fun singIn(LoginEvent:(String)->Unit){
+    fun signIn(LoginEvent:(String)->Unit){
         viewModelScope.launch {
-            val messageFormServer=userRepository.singIn(emailState.value!!, passwordState.value!!)
+            val messageFormServer=userRepository.signIn(emailState.value!!, passwordState.value!!)
             LoginEvent(messageFormServer)
         }
     }

@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.bagstore.model.repository.user.UserRepository
 import kotlinx.coroutines.launch
 
-class SingUpViewModel(private val userRepository: UserRepository) : ViewModel() {
+class SignUpViewModel(private val userRepository: UserRepository) : ViewModel() {
     val nameState = MutableLiveData("")
     val emailState = MutableLiveData("")
     val passwordState = MutableLiveData("")
@@ -30,9 +30,9 @@ class SingUpViewModel(private val userRepository: UserRepository) : ViewModel() 
         errorStateForConfigPassword.value = false
     }
 
-    fun singUp(LoginEvent:(String)->Unit){
+    fun signUp(LoginEvent:(String)->Unit){
         viewModelScope.launch {
-           val messageFormServer= userRepository.singUp(nameState.value!!,emailState.value!!, passwordState.value!!)
+           val messageFormServer= userRepository.signUp(nameState.value!!,emailState.value!!, passwordState.value!!)
             LoginEvent(messageFormServer)
         }
     }

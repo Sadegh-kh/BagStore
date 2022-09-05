@@ -14,8 +14,8 @@ import com.example.bagstore.di.myModules
 import com.example.bagstore.model.repository.TokenInMemory
 import com.example.bagstore.model.repository.user.UserRepository
 import com.example.bagstore.ui.features.IntroScreen
-import com.example.bagstore.ui.features.singInScreen.SingInScreen
-import com.example.bagstore.ui.features.singUpScreen.SingUpScreen
+import com.example.bagstore.ui.features.signInScreen.SignInScreen
+import com.example.bagstore.ui.features.singUpScreen.SignUpScreen
 import com.example.bagstore.ui.theme.MainAppTheme
 import com.example.bagstore.util.MyScreens
 import dev.burnoo.cokoin.Koin
@@ -74,10 +74,10 @@ fun BagStoreUi() {
             })
         }
         composable(MyScreens.SingUpScreen.route) {
-            SingUpScreen()
+            SignUpScreen()
         }
         composable(MyScreens.SingInScreen.route) {
-            SingInScreen()
+            SignInScreen()
         }
     }
 }

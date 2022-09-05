@@ -6,8 +6,8 @@ import com.example.bagstore.model.net.ApiService
 import com.example.bagstore.model.repository.TokenInMemory
 import com.example.bagstore.model.repository.user.UserRepository
 import com.example.bagstore.model.repository.user.UserRepositoryImp
-import com.example.bagstore.ui.features.singInScreen.SingInViewModel
-import com.example.bagstore.ui.features.singUpScreen.SingUpViewModel
+import com.example.bagstore.ui.features.signInScreen.SignInViewModel
+import com.example.bagstore.ui.features.singUpScreen.SignUpViewModel
 import com.example.bagstore.util.BASE_URL
 import okhttp3.OkHttpClient
 import org.koin.android.ext.koin.androidContext
@@ -51,6 +51,6 @@ val myModules= module {
     single<UserRepository> {
         UserRepositoryImp(get(),get())
     }
-viewModel { SingUpViewModel(get())}
-viewModel { SingInViewModel(get()) }
+viewModel { SignUpViewModel(get())}
+viewModel { SignInViewModel(get()) }
 }

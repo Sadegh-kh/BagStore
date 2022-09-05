@@ -1,7 +1,6 @@
 package com.example.bagstore.ui.features.singUpScreen
 
 import android.content.Context
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -43,7 +42,7 @@ import dev.burnoo.cokoin.navigation.getNavViewModel
 
 
 @Composable
-fun SingUpScreen() {
+fun SignUpScreen() {
 /*
     Column(
         verticalArrangement = Arrangement.Center,
@@ -74,7 +73,7 @@ fun SingUpScreen() {
                 .fillMaxSize()
         ) {
             ShapeImage()
-            CardViewSingUp()
+            CardViewSignUp()
         }
     }
 
@@ -82,10 +81,10 @@ fun SingUpScreen() {
 }
 
 @Composable
-fun CardViewSingUp() {
+fun CardViewSignUp() {
     //injection
     val navController = getNavController()
-    val viewModel = getNavViewModel<SingUpViewModel>()
+    val viewModel = getNavViewModel<SignUpViewModel>()
 
     val context = LocalContext.current
 
@@ -105,7 +104,7 @@ fun CardViewSingUp() {
         ) {
 
             Text(
-                text = "Sing Up",
+                text = "Sign Up",
                 color = Blue,
                 fontSize = 30.sp,
                 fontWeight = FontWeight.Bold,
@@ -121,7 +120,7 @@ fun CardViewSingUp() {
 
                     if (!errorResult){
 
-                        viewModel.singUp {
+                        viewModel.signUp {
 
                             if (it== VALUE_SUCCESS){
 
@@ -169,7 +168,7 @@ fun CardViewSingUp() {
     }
 }
 
-fun errorStates(viewModel: SingUpViewModel, context: Context): Boolean {
+fun errorStates(viewModel: SignUpViewModel, context: Context): Boolean {
     val errorStateName=viewModel.errorStateForName.value!!
     val errorStateEmail=viewModel.errorStateForEmail.value!!
     val errorStatePassword=viewModel.errorStateForPassword.value!!
@@ -178,7 +177,7 @@ fun errorStates(viewModel: SingUpViewModel, context: Context): Boolean {
 
     return (errorStateName||errorStateEmail||errorStatePassword||errorStateConfigPassword||netDisconnected)
 }
-fun checkFields(viewModel: SingUpViewModel, context: Context) {
+fun checkFields(viewModel: SignUpViewModel, context: Context) {
     //when you don't write anything and click on button show an error
     val emptyNameState = viewModel.nameState.value!!.isEmpty()
     val emptyEmailState = viewModel.emailState.value!!.isEmpty()
@@ -221,7 +220,7 @@ fun checkFields(viewModel: SingUpViewModel, context: Context) {
 }
 
 @Composable
-fun ColumnInfo(viewModel: SingUpViewModel) {
+fun ColumnInfo(viewModel: SignUpViewModel) {
     //states from view model
     val nameState = viewModel.nameState.observeAsState(initial = "")
     val emailState = viewModel.emailState.observeAsState(initial = "")
@@ -475,7 +474,7 @@ fun SingUpScreenPreview() {
                 .fillMaxHeight(0.8f)
         ) {
             ShapeImage()
-            CardViewSingUp()
+            CardViewSignUp()
         }
     }
 
