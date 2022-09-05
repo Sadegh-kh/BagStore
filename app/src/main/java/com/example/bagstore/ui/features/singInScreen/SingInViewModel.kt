@@ -3,7 +3,9 @@ package com.example.bagstore.ui.features.singInScreen
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.bagstore.model.repository.user.UserRepository
+import kotlinx.coroutines.launch
 import java.io.Closeable
 
 class SingInViewModel(private val userRepository: UserRepository) : ViewModel() {
@@ -20,6 +22,13 @@ class SingInViewModel(private val userRepository: UserRepository) : ViewModel() 
 
         errorStateForPassword.value = false
         errorStateForEmail.value = false
+    }
+
+    fun singIn(messageOfOperation:(String)->Unit){
+        viewModelScope.launch {
+            val messageFormServer=userRepository.singIn(emailState.value!!, passwordState.value!!)
+            messageOfOperation(messageFormServer)
+        }
     }
 
 
