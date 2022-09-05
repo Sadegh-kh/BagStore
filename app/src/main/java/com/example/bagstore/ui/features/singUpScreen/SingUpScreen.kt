@@ -1,6 +1,7 @@
 package com.example.bagstore.ui.features.singUpScreen
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -85,7 +86,7 @@ fun CardViewSingUp() {
     val navigation = getNavController()
     val viewModel = getNavViewModel<SingUpViewModel>()
 
-    val context= LocalContext.current
+    val context = LocalContext.current
 
     viewModel.resetStates()
 
@@ -114,7 +115,12 @@ fun CardViewSingUp() {
 
             Button(
                 onClick = {
-                    checkFields(viewModel,context)
+                    checkFields(viewModel, context)
+                    val errorResult=errorStates(viewModel,context)
+                    Log.v("errorState",errorResult.toString())
+                    if (!errorResult){
+                        viewModel.singUp()
+                    }
                 },
                 modifier = Modifier
                     .padding(top = 14.dp, bottom = 7.dp),
@@ -146,6 +152,57 @@ fun CardViewSingUp() {
         }
 
     }
+}
+
+fun errorStates(viewModel: SingUpViewModel, context: Context): Boolean {
+    val errorStateName=viewModel.errorStateForName.value!!
+    val errorStateEmail=viewModel.errorStateForEmail.value!!
+    val errorStatePassword=viewModel.errorStateForPassword.value!!
+    val errorStateConfigPassword=viewModel.errorStateForConfigPassword.value!!
+    val netDisconnected=!NetworkChecker(context).isInternetConnected
+
+    return (errorStateName||errorStateEmail||errorStatePassword||errorStateConfigPassword||netDisconnected)
+}
+fun checkFields(viewModel: SingUpViewModel, context: Context) {
+    //when you don't write anything and click on button show an error
+    val emptyNameState = viewModel.nameState.value!!.isEmpty()
+    val emptyEmailState = viewModel.emailState.value!!.isEmpty()
+    val emptyPasswordState = viewModel.passwordState.value!!.isEmpty()
+    val emptyConfigPasswordState = viewModel.configPasswordState.value!!.isEmpty()
+    if (emptyNameState) {
+        viewModel.errorStateForName.value = true
+    }
+    if (emptyEmailState) {
+        viewModel.errorStateForEmail.value = true
+    }
+    if (emptyPasswordState) {
+        viewModel.errorStateForPassword.value = true
+    }
+
+    if (emptyConfigPasswordState) {
+        viewModel.errorStateForConfigPassword.value = true
+    } else {
+        //checking to same password
+        if (viewModel.passwordState.value != viewModel.configPasswordState.value) {
+            viewModel.errorStateForConfigPassword.value = true
+        }
+
+        //check if name and email fields are complete and isn't connected show me a massage
+        //and it's in there because password fields are complete and they are same,
+        //can show me that
+        else{
+            val errorStateList= (viewModel.errorStateForName.value!! &&
+                    viewModel.errorStateForEmail.value!! )
+
+            val networkChecker=NetworkChecker(context)
+            if (!networkChecker.isInternetConnected && !errorStateList){
+                Toast.makeText(context, "check your connection !! ", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+
+    }
+
 }
 
 @Composable
@@ -410,42 +467,6 @@ fun SingUpScreenPreview() {
 }
 
 
-fun checkFields(viewModel: SingUpViewModel, context: Context) {
-    //when you don't write anything and click on button show an error
-    if (viewModel.nameState.value!!.isEmpty()) {
-        viewModel.errorStateForName.value = true
-    }
-    if (viewModel.emailState.value!!.isEmpty()) {
-        viewModel.errorStateForEmail.value = true
-    }
-    if (viewModel.passwordState.value!!.isEmpty()) {
-        viewModel.errorStateForPassword.value = true
-    }
 
-    if (viewModel.configPasswordState.value!!.isEmpty()) {
-        viewModel.errorStateForConfigPassword.value = true
-    } else {
-        //checking to same password
-        if (viewModel.passwordState.value != viewModel.configPasswordState.value) {
-            viewModel.errorStateForConfigPassword.value = true
-        }
-
-        //check if name and email fields are complete and isn't connected show me a massage
-        //and it's in there because password fields are complete and they are same,
-        //can show me that
-        else{
-            val errorStateList= (viewModel.errorStateForName.value!! &&
-                    viewModel.errorStateForEmail.value!! )
-
-            val networkChecker=NetworkChecker(context)
-            if (!networkChecker.isInternetConnected && !errorStateList){
-                Toast.makeText(context, "check your connection !! ", Toast.LENGTH_SHORT).show()
-            }
-        }
-
-
-    }
-
-}
 
 

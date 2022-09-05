@@ -8,6 +8,7 @@ interface UserRepository {
 
 
     //offline methods =>
+    //remove token and email address from Shared Preferences
     fun singOut()
     //load token from Shared Preferences and caching
     fun loadToken()
@@ -15,7 +16,7 @@ interface UserRepository {
     //save token into Shared Preferences
     fun saveToken(newToken:String)
     fun getToken():String
-
+    //save Email into Shared Preferences
     fun saveEmailAddress(emailAddress:String)
     fun getEmailAddress():String
 

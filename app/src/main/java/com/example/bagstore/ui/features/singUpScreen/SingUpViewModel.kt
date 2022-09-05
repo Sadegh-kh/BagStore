@@ -28,4 +28,8 @@ class SingUpViewModel(private val userRepository: UserRepository) : ViewModel() 
         errorStateForConfigPassword.value = false
     }
 
+    fun singUp(){
+
+    }
+
 }
