@@ -60,15 +60,15 @@ class UserRepositoryImp(
         sharedPreferences.edit().putString(KEY_TOKEN, newToken).apply()
     }
 
-    override fun getToken(): String {
-        return sharedPreferences.getString(KEY_TOKEN, "")!!
+    override fun getToken(): String? {
+        return sharedPreferences.getString(KEY_TOKEN, null)
     }
 
     override fun saveEmailAddress(emailAddress: String) {
         sharedPreferences.edit().putString(KEY_EMAIL_ADDRESS, emailAddress).apply()
     }
 
-    override fun getEmailAddress(): String {
-        return sharedPreferences.getString(KEY_EMAIL_ADDRESS, "")!!
+    override fun getEmailAddress(): String? {
+        return sharedPreferences.getString(KEY_EMAIL_ADDRESS, null)
     }
 }

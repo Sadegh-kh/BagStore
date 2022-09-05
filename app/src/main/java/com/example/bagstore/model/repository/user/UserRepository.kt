@@ -15,10 +15,10 @@ interface UserRepository {
 
     //save token into Shared Preferences
     fun saveToken(newToken:String)
-    fun getToken():String
+    fun getToken(): String?
     //save Email into Shared Preferences
     fun saveEmailAddress(emailAddress:String)
-    fun getEmailAddress():String
+    fun getEmailAddress(): String?
 
 
 
