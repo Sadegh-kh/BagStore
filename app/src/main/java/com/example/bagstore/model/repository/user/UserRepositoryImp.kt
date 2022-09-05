@@ -6,6 +6,7 @@ import com.example.bagstore.model.repository.TokenInMemory
 import com.example.bagstore.util.KEY_EMAIL_ADDRESS
 import com.example.bagstore.util.JsonProperty
 import com.example.bagstore.util.KEY_TOKEN
+import com.example.bagstore.util.VALUE_SUCCESS
 import com.google.gson.JsonObject
 
 class UserRepositoryImp(
@@ -23,7 +24,7 @@ class UserRepositoryImp(
             TokenInMemory.refreshToken(emailAddress, response.token)
             saveToken(response.token)
             saveEmailAddress(emailAddress)
-            response.message
+            return VALUE_SUCCESS
         } else {
             response.message
         }
@@ -39,7 +40,7 @@ class UserRepositoryImp(
             TokenInMemory.refreshToken(emailAddress, response.token)
             saveToken(response.token)
             saveEmailAddress(emailAddress)
-            response.message
+            return VALUE_SUCCESS
         } else {
             response.message
         }

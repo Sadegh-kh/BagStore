@@ -3,7 +3,9 @@ package com.example.bagstore.ui.features.singUpScreen
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.bagstore.model.repository.user.UserRepository
+import kotlinx.coroutines.launch
 
 class SingUpViewModel(private val userRepository: UserRepository) : ViewModel() {
     val nameState = MutableLiveData("")
@@ -28,8 +30,11 @@ class SingUpViewModel(private val userRepository: UserRepository) : ViewModel() 
         errorStateForConfigPassword.value = false
     }
 
-    fun singUp(){
-
+    fun singUp(messageOfOperation:(String)->Unit){
+        viewModelScope.launch {
+           val messageFormServer= userRepository.singUp(nameState.value!!,emailState.value!!, passwordState.value!!)
+            messageOfOperation(messageFormServer)
+        }
     }
 
 }
