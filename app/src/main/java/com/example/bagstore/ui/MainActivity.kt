@@ -1,7 +1,6 @@
 package com.example.bagstore.ui
 
 import android.os.Bundle
-import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,15 +11,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.bagstore.di.myModules
+import com.example.bagstore.model.repository.TokenInMemory
+import com.example.bagstore.model.repository.user.UserRepository
 import com.example.bagstore.ui.features.IntroScreen
 import com.example.bagstore.ui.features.singInScreen.SingInScreen
-import com.example.bagstore.ui.features.singInScreen.SingInViewModel
 import com.example.bagstore.ui.features.singUpScreen.SingUpScreen
 import com.example.bagstore.ui.theme.MainAppTheme
 import com.example.bagstore.util.MyScreens
 import dev.burnoo.cokoin.Koin
+import dev.burnoo.cokoin.get
 import dev.burnoo.cokoin.navigation.KoinNavHost
-import dev.burnoo.cokoin.navigation.getNavViewModel
 import org.koin.android.ext.koin.androidContext
 
 class MainActivity : ComponentActivity() {
@@ -33,11 +33,14 @@ class MainActivity : ComponentActivity() {
         setContent {
             Koin(appDeclaration = {
                 androidContext(this@MainActivity)
-                modules(myModules)}) {
+                modules(myModules)}
+            ) {
                 MainAppTheme {
                     Surface(
                         modifier = Modifier.fillMaxSize()
                     ) {
+                        val userRepository:UserRepository=get()
+                        userRepository.loadToken()
                         BagStoreUi()
                     }
 
@@ -50,7 +53,14 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun BagStoreUi() {
     val navController = rememberNavController()
-    KoinNavHost(navController = navController, startDestination = MyScreens.IntroScreen.route) {
+
+    val startDestinationScreen=if (TokenInMemory.token==null){
+        MyScreens.IntroScreen.route
+    }else{
+        MyScreens.MainScreen.route
+    }
+
+    KoinNavHost(navController = navController, startDestination = startDestinationScreen) {
 
         composable(MyScreens.MainScreen.route) {
             MainScreen()
