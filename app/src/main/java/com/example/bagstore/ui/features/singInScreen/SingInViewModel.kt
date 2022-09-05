@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.bagstore.model.repository.user.UserRepository
 import kotlinx.coroutines.launch
-import java.io.Closeable
 
 class SingInViewModel(private val userRepository: UserRepository) : ViewModel() {
 
@@ -24,10 +23,10 @@ class SingInViewModel(private val userRepository: UserRepository) : ViewModel() 
         errorStateForEmail.value = false
     }
 
-    fun singIn(messageOfOperation:(String)->Unit){
+    fun singIn(LoginEvent:(String)->Unit){
         viewModelScope.launch {
             val messageFormServer=userRepository.singIn(emailState.value!!, passwordState.value!!)
-            messageOfOperation(messageFormServer)
+            LoginEvent(messageFormServer)
         }
     }
 

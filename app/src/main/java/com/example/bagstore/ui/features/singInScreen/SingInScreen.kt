@@ -31,6 +31,7 @@ import com.example.bagstore.R
 import com.example.bagstore.ui.theme.*
 import com.example.bagstore.util.MyScreens
 import com.example.bagstore.util.NetworkChecker
+import com.example.bagstore.util.VALUE_SUCCESS
 import dev.burnoo.cokoin.navigation.getNavController
 import dev.burnoo.cokoin.navigation.getNavViewModel
 
@@ -59,7 +60,7 @@ fun SingInScreen() {
 @Composable
 fun CardViewSingUp() {
     //injection
-    val navigation = getNavController()
+    val navController = getNavController()
     val viewModel = getNavViewModel<SingInViewModel>()
     val context = LocalContext.current
 
@@ -91,7 +92,23 @@ fun CardViewSingUp() {
             Button(
                 onClick = {
                     checkFields(viewModel,context)
-                },
+                    val errorResult=errorStates(viewModel,context)
+                    if (!errorResult){
+                        viewModel.singIn {
+                           if (it== VALUE_SUCCESS){
+                               navController.navigate(MyScreens.MainScreen.route){
+                                   popUpTo(MyScreens.IntroScreen.route){
+                                       inclusive=true
+                                   }
+                               }
+                           }else{
+                               Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+                           }
+                        }
+                    }
+
+                }
+                ,
                 modifier = Modifier
                     .padding(top = 14.dp, bottom = 7.dp),
                 shape = Shapes.small
@@ -108,7 +125,7 @@ fun CardViewSingUp() {
                 Text(text = "Don't have any account?", fontSize = 16.sp)
                 Spacer(modifier = Modifier.width(4.dp))
                 TextButton(onClick = {
-                    navigation.navigate(MyScreens.SingUpScreen.route) {
+                    navController.navigate(MyScreens.SingUpScreen.route) {
 
                         //transfer to IntroScreen when click on BackPressed
                         popUpTo(MyScreens.SingInScreen.route) {
@@ -124,6 +141,14 @@ fun CardViewSingUp() {
         }
 
     }
+}
+
+fun errorStates(viewModel: SingInViewModel, context: Context): Boolean {
+    val errorStateEmail=viewModel.errorStateForEmail.value!!
+    val errorStatePassword=viewModel.errorStateForPassword.value!!
+    val netDisconnected=!NetworkChecker(context).isInternetConnected
+
+    return (errorStateEmail||errorStatePassword||netDisconnected)
 }
 
 fun checkFields(viewModel: SingInViewModel, context: Context) {

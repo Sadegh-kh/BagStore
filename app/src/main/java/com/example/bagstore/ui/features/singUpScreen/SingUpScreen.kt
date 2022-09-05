@@ -118,7 +118,7 @@ fun CardViewSingUp() {
                 onClick = {
                     checkFields(viewModel, context)
                     val errorResult=errorStates(viewModel,context)
-                    Log.v("errorState",errorResult.toString())
+
                     if (!errorResult){
 
                         viewModel.singUp {

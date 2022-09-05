@@ -30,10 +30,10 @@ class SingUpViewModel(private val userRepository: UserRepository) : ViewModel() 
         errorStateForConfigPassword.value = false
     }
 
-    fun singUp(messageOfOperation:(String)->Unit){
+    fun singUp(LoginEvent:(String)->Unit){
         viewModelScope.launch {
            val messageFormServer= userRepository.singUp(nameState.value!!,emailState.value!!, passwordState.value!!)
-            messageOfOperation(messageFormServer)
+            LoginEvent(messageFormServer)
         }
     }
 
