@@ -37,6 +37,7 @@ import com.example.bagstore.ui.theme.ErrorIcon
 import com.example.bagstore.ui.theme.Shapes
 import com.example.bagstore.util.MyScreens
 import com.example.bagstore.util.NetworkChecker
+import com.example.bagstore.util.VALUE_SUCCESS
 import dev.burnoo.cokoin.navigation.getNavController
 import dev.burnoo.cokoin.navigation.getNavViewModel
 
@@ -83,7 +84,7 @@ fun SingUpScreen() {
 @Composable
 fun CardViewSingUp() {
     //injection
-    val navigation = getNavController()
+    val navController = getNavController()
     val viewModel = getNavViewModel<SingUpViewModel>()
 
     val context = LocalContext.current
@@ -119,7 +120,21 @@ fun CardViewSingUp() {
                     val errorResult=errorStates(viewModel,context)
                     Log.v("errorState",errorResult.toString())
                     if (!errorResult){
-                        viewModel.singUp()
+
+                        viewModel.singUp {
+
+                            if (it== VALUE_SUCCESS){
+
+                               navController.navigate(MyScreens.MainScreen.route){
+                                   popUpTo(MyScreens.IntroScreen.route){
+                                       inclusive=true
+                                   }
+                               }
+
+                            }else{
+                                Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+                            }
+                        }
                     }
                 },
                 modifier = Modifier
@@ -138,7 +153,7 @@ fun CardViewSingUp() {
                 Text(text = "Already have an account?", fontSize = 16.sp)
                 Spacer(modifier = Modifier.width(4.dp))
                 TextButton(onClick = {
-                    navigation.navigate(MyScreens.SingInScreen.route) {
+                    navController.navigate(MyScreens.SingInScreen.route) {
                         //transfer to IntroScreen when click on BackButton
                         popUpTo(MyScreens.SingUpScreen.route) {
                             inclusive = true
