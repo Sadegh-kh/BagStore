@@ -87,6 +87,7 @@ fun ProgressDialogSignIn() {
         }
     }
 }
+
 @Composable
 fun ShapeImage() {
 
@@ -147,6 +148,7 @@ fun CardViewSingUp() {
                     checkFields(viewModel, context)
                     val errorResult = errorStates(viewModel, context)
                     if (!errorResult) {
+
                         sendInfo(viewModel, navController, context)
 
                     }
@@ -187,7 +189,6 @@ fun CardViewSingUp() {
     }
 }
 
-
 fun sendInfo(viewModel: SignInViewModel, navController: NavHostController, context: Context) {
     val jobSignIn = viewModel.signIn {
         if (it == VALUE_SUCCESS) {
@@ -198,6 +199,7 @@ fun sendInfo(viewModel: SignInViewModel, navController: NavHostController, conte
             }
         } else {
             Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+            viewModel.progressState.value=false
         }
     }
     if (jobSignIn.isActive) {
