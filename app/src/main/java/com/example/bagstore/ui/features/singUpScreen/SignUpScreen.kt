@@ -39,6 +39,7 @@ import com.example.bagstore.ui.theme.Shapes
 import com.example.bagstore.util.MyScreens
 import com.example.bagstore.util.NetworkChecker
 import com.example.bagstore.util.VALUE_SUCCESS
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dev.burnoo.cokoin.navigation.getNavController
 import dev.burnoo.cokoin.navigation.getNavViewModel
 
@@ -61,6 +62,8 @@ fun SignUpScreen() {
         }
     }*/
 
+    val systemUiController= rememberSystemUiController()
+    systemUiController.setStatusBarColor(color = Blue,darkIcons = false)
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
         Box(
             modifier = Modifier

@@ -17,12 +17,16 @@ import com.example.bagstore.ui.theme.BackgroundMain
 import com.example.bagstore.ui.theme.Blue
 import com.example.bagstore.ui.theme.MainAppTheme
 import com.example.bagstore.ui.theme.Shapes
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dev.burnoo.cokoin.navigation.getNavController
 
 
 @Composable
 fun IntroScreen(singInClick: () -> Unit, singUpClick: () -> Unit) {
     val navigation= getNavController()
+
+    val systemUiController= rememberSystemUiController()
+    systemUiController.setStatusBarColor(color = Blue,darkIcons = false)
 
     Image(
         painter = painterResource(id = R.drawable.img_intro),

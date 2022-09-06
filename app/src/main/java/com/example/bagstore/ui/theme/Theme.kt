@@ -46,5 +46,5 @@ fun MainAppTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composabl
     )
 
     val systemUiController= rememberSystemUiController()
-    systemUiController.setStatusBarColor(color = Blue, darkIcons = false)
+    systemUiController.setStatusBarColor(color = BackgroundMain, darkIcons = true)
 }
