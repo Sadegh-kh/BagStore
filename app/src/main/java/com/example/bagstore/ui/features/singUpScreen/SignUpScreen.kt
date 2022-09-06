@@ -29,6 +29,8 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import com.example.bagstore.R
 import com.example.bagstore.ui.theme.BackgroundMain
 import com.example.bagstore.ui.theme.Blue
@@ -75,6 +77,56 @@ fun SignUpScreen() {
             ShapeImage()
             CardViewSignUp()
         }
+    }
+    Box(modifier = Modifier.fillMaxSize(), Alignment.Center) {
+
+        ProgressDialogSignUp()
+    }
+
+}
+@Composable
+fun ProgressDialogSignUp() {
+    val viewModel = getNavViewModel<SignUpViewModel>()
+    val showDialog = viewModel.progressState.observeAsState(false)
+
+    if (showDialog.value) {
+        Dialog(
+            onDismissRequest = { viewModel.progressState.value = false },
+            DialogProperties(dismissOnBackPress = true, dismissOnClickOutside = false)
+        ) {
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .size(100.dp)
+                    .background(color = BackgroundMain, Shapes.medium)
+            ) {
+
+                CircularProgressIndicator()
+
+            }
+
+        }
+    }
+}
+
+@Composable
+fun ShapeImage() {
+
+    Box(
+        modifier = Modifier
+            .wrapContentSize()
+            .padding(bottom = 8.dp)
+            .clip(CircleShape)
+            .background(BackgroundMain), contentAlignment = Alignment.Center
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.ic_icon_app),
+            contentDescription = null,
+            modifier = Modifier
+                .padding(10.dp)
+                .size(40.dp)
+        )
+
     }
 
 
@@ -132,6 +184,7 @@ fun CardViewSignUp() {
 
                             }else{
                                 Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+                                viewModel.progressState.value=false
                             }
                         }
                     }
@@ -176,6 +229,7 @@ fun errorStates(viewModel: SignUpViewModel, context: Context): Boolean {
 
     return (errorStateName||errorStateEmail||errorStatePassword||errorStateConfigPassword||netDisconnected)
 }
+
 fun checkFields(viewModel: SignUpViewModel, context: Context) {
     //when you don't write anything and click on button show an error
     val emptyNameState = viewModel.nameState.value!!.isEmpty()
@@ -421,28 +475,7 @@ fun TextFieldPassword(
 
 }
 
-@Composable
-fun ShapeImage() {
 
-    Box(
-        modifier = Modifier
-            .wrapContentSize()
-            .padding(bottom = 8.dp)
-            .clip(CircleShape)
-            .background(BackgroundMain), contentAlignment = Alignment.Center
-    ) {
-        Image(
-            painter = painterResource(id = R.drawable.ic_icon_app),
-            contentDescription = null,
-            modifier = Modifier
-                .padding(10.dp)
-                .size(40.dp)
-        )
-
-    }
-
-
-}
 
 @Composable
 fun BackgroundSingUp() {

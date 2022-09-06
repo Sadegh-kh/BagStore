@@ -4,8 +4,6 @@ import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.TransformableState
-import androidx.compose.foundation.gestures.transformable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -39,7 +37,6 @@ import com.example.bagstore.util.NetworkChecker
 import com.example.bagstore.util.VALUE_SUCCESS
 import dev.burnoo.cokoin.navigation.getNavController
 import dev.burnoo.cokoin.navigation.getNavViewModel
-import kotlinx.coroutines.Job
 
 @Composable
 fun SignInScreen() {
@@ -62,12 +59,12 @@ fun SignInScreen() {
         }
     }
     Box(modifier = Modifier.fillMaxSize(), Alignment.Center) {
-        ProgressDialog()
+        ProgressDialogSignIn()
     }
 }
 
 @Composable
-fun ProgressDialog() {
+fun ProgressDialogSignIn() {
     val viewModel = getNavViewModel<SignInViewModel>()
     val showDialog = viewModel.progressState.observeAsState(false)
 
@@ -89,6 +86,27 @@ fun ProgressDialog() {
 
         }
     }
+}
+@Composable
+fun ShapeImage() {
+
+    Box(
+        modifier = Modifier
+            .wrapContentSize()
+            .clip(CircleShape)
+            .background(BackgroundMain), contentAlignment = Alignment.Center
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.ic_icon_app),
+            contentDescription = null,
+            modifier = Modifier
+                .padding(10.dp)
+                .size(40.dp)
+        )
+
+    }
+
+
 }
 
 @Composable
@@ -392,27 +410,7 @@ fun TextFieldPassword(
 }
 
 
-@Composable
-fun ShapeImage() {
 
-    Box(
-        modifier = Modifier
-            .wrapContentSize()
-            .clip(CircleShape)
-            .background(BackgroundMain), contentAlignment = Alignment.Center
-    ) {
-        Image(
-            painter = painterResource(id = R.drawable.ic_icon_app),
-            contentDescription = null,
-            modifier = Modifier
-                .padding(10.dp)
-                .size(40.dp)
-        )
-
-    }
-
-
-}
 
 @Preview(showBackground = true)
 @Composable
