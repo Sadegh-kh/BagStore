@@ -4,6 +4,8 @@ import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.TransformableState
+import androidx.compose.foundation.gestures.transformable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -27,6 +29,9 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
+import androidx.navigation.NavHostController
 import com.example.bagstore.R
 import com.example.bagstore.ui.theme.*
 import com.example.bagstore.util.MyScreens
@@ -34,6 +39,7 @@ import com.example.bagstore.util.NetworkChecker
 import com.example.bagstore.util.VALUE_SUCCESS
 import dev.burnoo.cokoin.navigation.getNavController
 import dev.burnoo.cokoin.navigation.getNavViewModel
+import kotlinx.coroutines.Job
 
 @Composable
 fun SignInScreen() {
@@ -53,6 +59,34 @@ fun SignInScreen() {
         ) {
             ShapeImage()
             CardViewSingUp()
+        }
+    }
+    Box(modifier = Modifier.fillMaxSize(), Alignment.Center) {
+        ProgressDialog()
+    }
+}
+
+@Composable
+fun ProgressDialog() {
+    val viewModel = getNavViewModel<SignInViewModel>()
+    val showDialog = viewModel.progressState.observeAsState(false)
+
+    if (showDialog.value) {
+        Dialog(
+            onDismissRequest = { viewModel.progressState.value = false },
+            DialogProperties(dismissOnBackPress = true, dismissOnClickOutside = false)
+        ) {
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .size(100.dp)
+                    .background(color = BackgroundMain, Shapes.medium)
+            ) {
+
+                CircularProgressIndicator()
+
+            }
+
         }
     }
 }
@@ -89,34 +123,26 @@ fun CardViewSingUp() {
 
             ColumnInfo(viewModel)
 
+
             Button(
                 onClick = {
-                    checkFields(viewModel,context)
-                    val errorResult=errorStates(viewModel,context)
-                    if (!errorResult){
-                        viewModel.signIn {
-                           if (it== VALUE_SUCCESS){
-                               navController.navigate(MyScreens.MainScreen.route){
-                                   popUpTo(MyScreens.IntroScreen.route){
-                                       inclusive=true
-                                   }
-                               }
-                           }else{
-                               Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
-                           }
-                        }
+                    checkFields(viewModel, context)
+                    val errorResult = errorStates(viewModel, context)
+                    if (!errorResult) {
+                        sendInfo(viewModel, navController, context)
+
                     }
 
-                }
-                ,
+                },
                 modifier = Modifier
                     .padding(top = 14.dp, bottom = 7.dp),
                 shape = Shapes.small
             ) {
 
-                Text(text = "Register Account", modifier = Modifier.padding(10.dp))
+                Text(text = "Log In", modifier = Modifier.padding(10.dp))
 
             }
+
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -143,12 +169,36 @@ fun CardViewSingUp() {
     }
 }
 
-fun errorStates(viewModel: SignInViewModel, context: Context): Boolean {
-    val errorStateEmail=viewModel.errorStateForEmail.value!!
-    val errorStatePassword=viewModel.errorStateForPassword.value!!
-    val netDisconnected=!NetworkChecker(context).isInternetConnected
 
-    return (errorStateEmail||errorStatePassword||netDisconnected)
+fun sendInfo(viewModel: SignInViewModel, navController: NavHostController, context: Context) {
+    val jobSignIn = viewModel.signIn {
+        if (it == VALUE_SUCCESS) {
+            navController.navigate(MyScreens.MainScreen.route) {
+                popUpTo(MyScreens.IntroScreen.route) {
+                    inclusive = true
+                }
+            }
+        } else {
+            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+        }
+    }
+    if (jobSignIn.isActive) {
+        viewModel.progressState.value = true
+
+    } else if (jobSignIn.isCompleted) {
+        viewModel.progressState.value = false
+
+    } else if (jobSignIn.isCancelled) {
+        viewModel.progressState.value = false
+    }
+}
+
+fun errorStates(viewModel: SignInViewModel, context: Context): Boolean {
+    val errorStateEmail = viewModel.errorStateForEmail.value!!
+    val errorStatePassword = viewModel.errorStateForPassword.value!!
+    val netDisconnected = !NetworkChecker(context).isInternetConnected
+
+    return (errorStateEmail || errorStatePassword || netDisconnected)
 }
 
 fun checkFields(viewModel: SignInViewModel, context: Context) {

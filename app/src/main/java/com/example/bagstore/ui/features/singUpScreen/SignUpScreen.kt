@@ -142,7 +142,6 @@ fun CardViewSignUp() {
             ) {
 
                 Text(text = "Register Account", modifier = Modifier.padding(10.dp))
-
             }
 
             Row(

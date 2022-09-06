@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.bagstore.model.repository.user.UserRepository
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
@@ -16,6 +17,8 @@ class SignInViewModel(private val userRepository: UserRepository) : ViewModel() 
     val errorStateForEmail = MutableLiveData(false)
     val errorStateForPassword = MutableLiveData(false)
 
+    val progressState=MutableLiveData(false)
+
     fun resetStates() {
         emailState.value = ""
         passwordState.value = ""
@@ -24,11 +27,12 @@ class SignInViewModel(private val userRepository: UserRepository) : ViewModel() 
         errorStateForEmail.value = false
     }
 
-    fun signIn(LoginEvent:(String)->Unit){
-        viewModelScope.launch {
+    fun signIn(LoginEvent:(String)->Unit): Job {
+        val jobInfo=viewModelScope.launch {
             val messageFormServer=userRepository.signIn(emailState.value!!, passwordState.value!!)
             LoginEvent(messageFormServer)
         }
+        return jobInfo
     }
 
 
