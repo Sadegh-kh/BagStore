@@ -18,6 +18,8 @@ class SignUpViewModel(private val userRepository: UserRepository) : ViewModel() 
     val errorStateForPassword = MutableLiveData(false)
     val errorStateForConfigPassword = MutableLiveData(false)
 
+    val progressState=MutableLiveData(false)
+
     fun resetStates() {
         nameState.value = ""
         emailState.value = ""
@@ -34,6 +36,15 @@ class SignUpViewModel(private val userRepository: UserRepository) : ViewModel() 
         viewModelScope.launch {
            val messageFormServer= userRepository.signUp(nameState.value!!,emailState.value!!, passwordState.value!!)
             LoginEvent(messageFormServer)
+        }.also {
+            //this bring progress state for show it
+            if (it.isActive){
+                progressState.value=true
+            }else if(it.isCompleted){
+                progressState.value=false
+            }else if(it.isCancelled){
+                progressState.value=false
+            }
         }
     }
 
