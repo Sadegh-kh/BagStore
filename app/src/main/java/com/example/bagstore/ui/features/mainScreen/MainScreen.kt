@@ -153,7 +153,8 @@ fun CategoryList() {
 @Composable
 fun CategoryItem() {
     Column(
-        modifier = Modifier.padding(start = 18.dp)
+        modifier = Modifier.padding(start = 18.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Surface(shape = Shapes.small) {
 
