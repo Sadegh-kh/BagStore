@@ -4,6 +4,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -12,6 +14,7 @@ import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -27,13 +30,41 @@ import com.example.bagstore.ui.theme.Shapes
 
 @Composable
 fun MainScreen() {
-    Column(modifier = Modifier.fillMaxSize()) {
-        TopToolBar()
-        CategoryList()
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        contentPadding = PaddingValues(bottom = 25.dp)
+    ) {
+        item {
+            TopToolBar()
+            CategoryList()
 
-        ProductSubject()
+
+            ProductSubject()
+            ProductSubject()
+
+            AdvertisementBanner()
+
+            ProductSubject()
+            ProductSubject()
+        }
     }
 
+}
+
+@Composable
+fun AdvertisementBanner() {
+
+    Image(
+        painter = painterResource(id = R.drawable.img_intro),
+        contentDescription = "advertisement",
+        contentScale = ContentScale.FillWidth,
+        modifier = Modifier
+            .fillMaxWidth(0.95f)
+            .height(250.dp)
+            .padding(top = 18.dp)
+            .clip(Shapes.medium)
+            .clickable { })
 }
 
 @Composable
@@ -56,17 +87,24 @@ fun ProductSubject() {
 
 @Composable
 fun ProductItem() {
-    Card(modifier = Modifier
-        .wrapContentSize()
-        .padding(start = 20.dp)
-        .clickable {  },
-        shape = Shapes.medium) {
-        Column(modifier = Modifier.wrapContentSize(), horizontalAlignment = Alignment.CenterHorizontally) {
+    Card(
+        modifier = Modifier
+            .wrapContentSize()
+            .padding(start = 20.dp)
+            .clickable { },
+        shape = Shapes.medium
+    ) {
+        Column(
+            modifier = Modifier.wrapContentSize(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             Image(
                 painter = painterResource(id = R.drawable.img_intro),
                 contentDescription = "Product Subject Image",
                 contentScale = ContentScale.FillWidth,
-                modifier = Modifier.fillMaxWidth().size(250.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .size(250.dp)
             )
 
             ProductTextBox()
@@ -82,7 +120,7 @@ fun ProductTextBox() {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .size(250.dp,100.dp)
+            .size(250.dp, 100.dp)
             .background(Color.White), contentAlignment = Alignment.TopStart
     ) {
         Column(Modifier.padding(10.dp)) {
@@ -115,7 +153,6 @@ fun CategoryList() {
 @Composable
 fun CategoryItem() {
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.padding(start = 18.dp)
     ) {
         Surface(shape = Shapes.small) {
