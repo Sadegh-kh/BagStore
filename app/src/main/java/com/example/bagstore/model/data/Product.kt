@@ -4,12 +4,15 @@ package com.example.bagstore.model.data
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 import android.os.Parcelable
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
 data class ProductResponse(
     val success: Boolean,
     val products: List<Product>
 )
 
+@Entity
 @Parcelize
 data class Product(
     @SerializedName("category")
@@ -25,6 +28,7 @@ data class Product(
     @SerializedName("price")
     val price: String,
     @SerializedName("productId")
+    @PrimaryKey
     val productId: String,
     @SerializedName("soldItem")
     val soldItem: String,
