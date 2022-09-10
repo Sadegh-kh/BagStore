@@ -17,36 +17,40 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.bagstore.R
-import com.example.bagstore.ui.theme.BackgroundBlue
-import com.example.bagstore.ui.theme.BackgroundMain
-import com.example.bagstore.ui.theme.MainAppTheme
-import com.example.bagstore.ui.theme.Shapes
+import com.example.bagstore.ui.theme.*
+import com.example.bagstore.util.NetworkChecker
+import dev.burnoo.cokoin.viewmodel.getViewModel
+import org.koin.core.parameter.parametersOf
 
 
 @Composable
 fun MainScreen() {
+    val context = LocalContext.current
+    val viewModel = getViewModel<MainScreenViewModel>(
+        parameters = {
+            //set net condition for MainScreenViewModel from modules(di)
+            parametersOf(NetworkChecker(context).isInternetConnected)
+        }
+    )
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         contentPadding = PaddingValues(bottom = 25.dp)
     ) {
         item {
-            TopToolBar()
-            CategoryList()
-
-
-            ProductSubject()
-            ProductSubject()
-
-            AdvertisementBanner()
-
-            ProductSubject()
-            ProductSubject()
+            val progressBarVisibility=viewModel.showProgressBar.value
+            if (progressBarVisibility){
+                LinearProgressIndicator(
+                    modifier = Modifier.fillMaxWidth(),
+                    color = Blue
+                )
+            }
         }
     }
 
