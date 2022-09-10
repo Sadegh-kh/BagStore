@@ -8,7 +8,9 @@ import com.example.bagstore.model.data.Advertisement
 import com.example.bagstore.model.data.Product
 import com.example.bagstore.model.repository.product.ProductRepository
 import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.*
 
 class MainScreenViewModel(
     private val productRepository: ProductRepository,
@@ -25,6 +27,10 @@ class MainScreenViewModel(
     private fun getAllDatsFormServer(isInternetConnected: Boolean) {
         viewModelScope.launch{
             showProgressBar.value=true
+
+            //delay for 2 second for fun :D
+            delay(2000L)
+
             val loadedProduct=async {productRepository.getAllProducts()}
             val loadedAdvertisement=async {productRepository.getAllAdvertisement(isInternetConnected)}
 

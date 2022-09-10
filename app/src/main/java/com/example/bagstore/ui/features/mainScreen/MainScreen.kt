@@ -5,7 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -24,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.bagstore.R
 import com.example.bagstore.ui.theme.*
+import com.example.bagstore.util.CATEGORY
 import com.example.bagstore.util.NetworkChecker
 import dev.burnoo.cokoin.viewmodel.getViewModel
 import org.koin.core.parameter.parametersOf
@@ -51,6 +51,9 @@ fun MainScreen() {
                     color = Blue
                 )
             }
+            TopToolBar()
+
+            CategoryBar(CATEGORY)
         }
     }
 
@@ -145,17 +148,17 @@ fun ProductTextBox() {
 }
 
 @Composable
-fun CategoryList() {
+fun CategoryBar(category: List<Pair<String, Int>>) {
     LazyRow(modifier = Modifier.padding(top = 16.dp), contentPadding = PaddingValues(end = 18.dp)) {
-        items(10) {
-            CategoryItem()
+        items(category.size) {
+            CategoryItem(category[it])
         }
 
     }
 }
 
 @Composable
-fun CategoryItem() {
+fun CategoryItem(categoryItem: Pair<String, Int>) {
     Column(
         modifier = Modifier.padding(start = 18.dp),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -163,7 +166,7 @@ fun CategoryItem() {
         Surface(shape = Shapes.small) {
 
             Image(
-                painter = painterResource(id = R.drawable.ic_icon_app),
+                painter = painterResource(id = categoryItem.second),
                 contentDescription = "categoryItem",
                 modifier = Modifier
                     .background(BackgroundBlue)
@@ -173,7 +176,7 @@ fun CategoryItem() {
 
         }
 
-        Text(text = "Hotels", modifier = Modifier.padding(top = 5.dp), color = Color.Gray)
+        Text(text = categoryItem.first, modifier = Modifier.padding(top = 5.dp), color = Color.Gray)
 
     }
 }
