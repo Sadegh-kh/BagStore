@@ -11,9 +11,11 @@ import com.example.bagstore.model.repository.product.ProductRepository
 import com.example.bagstore.model.repository.product.ProductRepositoryImp
 import com.example.bagstore.model.repository.user.UserRepository
 import com.example.bagstore.model.repository.user.UserRepositoryImp
+import com.example.bagstore.ui.features.mainScreen.MainScreenViewModel
 import com.example.bagstore.ui.features.signInScreen.SignInViewModel
 import com.example.bagstore.ui.features.singUpScreen.SignUpViewModel
 import com.example.bagstore.util.BASE_URL
+import com.example.bagstore.util.NetworkChecker
 import okhttp3.OkHttpClient
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
@@ -27,7 +29,7 @@ val myModules= module {
     //database
     single<MyDatabase> {
         Room.databaseBuilder(
-            androidApplication(),
+            androidContext(),
             MyDatabase::class.java,
             "myDatabase.db"
         ).build()
@@ -85,4 +87,7 @@ val myModules= module {
     //view models
     viewModel { SignUpViewModel(get()) }
     viewModel { SignInViewModel(get()) }
+
+    //get net condition from entry
+    viewModel { (isNetConnected:Boolean)-> MainScreenViewModel(get(),isNetConnected) }
 }
