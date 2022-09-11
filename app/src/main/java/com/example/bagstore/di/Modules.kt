@@ -69,7 +69,7 @@ val myModules= module {
         Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
-            .client(get(OkHttpClient::class))
+            .client(get())
             .build()
             .create(ApiService::class.java)
     }

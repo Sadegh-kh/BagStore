@@ -8,6 +8,6 @@ interface ProductRepository {
     suspend fun getAllProducts(): List<Product>
     suspend fun getAllAdvertisement(isInternetConnected:Boolean): List<Advertisement>
 
-    suspend fun insertAllProduct()
+    suspend fun insertAllProduct(isInternetConnected: Boolean)
 
 }

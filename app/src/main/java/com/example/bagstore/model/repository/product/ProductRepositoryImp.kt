@@ -16,16 +16,24 @@ class ProductRepositoryImp(
 
     override suspend fun getAllAdvertisement(isInternetConnected:Boolean): List<Advertisement> {
         if (isInternetConnected){
-            return apiService.getAllAdvertisements().advertisement
+            if (apiService.getAllAdvertisements().success){
+                return apiService.getAllAdvertisements().advertisement
+            }
         }
         return listOf()
     }
 
-    override suspend fun insertAllProduct(){
-        val response=apiService.getAllProducts()
-        if (response.success){
-            productDao.insetAllProducts(response.products)
+    override suspend fun insertAllProduct(isInternetConnected: Boolean){
+        if (isInternetConnected){
+            val response=apiService.getAllProducts()
+            if (response.success){
+                productDao.insetAllProducts(response.products)
+            }
+        }else{
+           val lastLoadedProducts= productDao.getAllProducts()
+            productDao.insetAllProducts(lastLoadedProducts)
         }
+
     }
 
 }

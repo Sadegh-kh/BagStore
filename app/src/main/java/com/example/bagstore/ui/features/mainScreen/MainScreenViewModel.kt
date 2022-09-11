@@ -1,6 +1,5 @@
 package com.example.bagstore.ui.features.mainScreen
 
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,7 +9,6 @@ import com.example.bagstore.model.repository.product.ProductRepository
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.util.*
 
 class MainScreenViewModel(
     private val productRepository: ProductRepository,
@@ -31,7 +29,10 @@ class MainScreenViewModel(
             //delay for 2 second for fun :D
             delay(2000L)
 
-            val loadedProduct=async {productRepository.getAllProducts()}
+            val loadedProduct=async {
+                productRepository.insertAllProduct(isInternetConnected)
+                productRepository.getAllProducts()
+            }
             val loadedAdvertisement=async {productRepository.getAllAdvertisement(isInternetConnected)}
 
             updateDats(loadedProduct.await(),loadedAdvertisement.await())
