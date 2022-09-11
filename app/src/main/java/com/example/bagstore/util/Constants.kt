@@ -20,3 +20,10 @@ val CATEGORY= listOf<Pair<String,Int>>(
     Pair("tote", R.drawable.ic_cat_tote),
     Pair("wallet", R.drawable.ic_cat_wallet),
 )
+
+val TAGS= listOf(
+    "Newest",
+    "Best Sellers",
+    "Most Visited",
+    "Highest Quality"
+)

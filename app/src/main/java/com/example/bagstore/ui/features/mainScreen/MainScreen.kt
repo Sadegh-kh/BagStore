@@ -21,12 +21,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.example.bagstore.R
+import com.example.bagstore.model.data.Advertisement
+import com.example.bagstore.model.data.Product
 import com.example.bagstore.ui.theme.*
 import com.example.bagstore.util.CATEGORY
 import com.example.bagstore.util.NetworkChecker
+import com.example.bagstore.util.TAGS
 import dev.burnoo.cokoin.viewmodel.getViewModel
 import org.koin.core.parameter.parametersOf
+import java.util.*
 
 
 @Composable
@@ -45,6 +50,8 @@ fun MainScreen() {
     ) {
         item {
             val progressBarVisibility=viewModel.showProgressBar.value
+            val productList=viewModel.productState.value
+            val advertisementList=viewModel.advertisementState.value ?: listOf()
             if (progressBarVisibility){
                 LinearProgressIndicator(
                     modifier = Modifier.fillMaxWidth(),
@@ -54,9 +61,32 @@ fun MainScreen() {
             TopToolBar()
 
             CategoryBar(CATEGORY)
+
+            if (!progressBarVisibility){
+                BunchOfProduct(TAGS,productList,advertisementList)
+            }
+
         }
     }
 
+}
+
+@Composable
+fun BunchOfProduct(
+    tags: List<String>,
+    productList: List<Product>,
+    advertisementList: List<Advertisement>
+) {
+    Column {
+
+        tags.forEach {
+            val productFilterByTag=productList.filter { product->
+                product.tags==it
+            }
+            ProductBar(it , productFilterByTag.shuffled())
+        }
+
+    }
 }
 
 @Composable
@@ -75,17 +105,23 @@ fun AdvertisementBanner() {
 }
 
 @Composable
-fun ProductSubject() {
+fun ProductBar(tag: String, productFilterByTag: List<Product>) {
     Column {
+        val visibilityTag=if(productFilterByTag.isEmpty()){
+            ""
+        }else{
+            tag
+        }
+
         Text(
-            text = "Popular Destinations",
+            text = visibilityTag,
             style = MaterialTheme.typography.h6,
             fontSize = 25.sp,
             modifier = Modifier.padding(top = 30.dp, bottom = 20.dp, start = 20.dp)
         )
         LazyRow(contentPadding = PaddingValues(end = 20.dp)) {
-            items(10) {
-                ProductItem()
+            items(productFilterByTag.size) {
+                ProductItem(productFilterByTag[it])
             }
         }
 
@@ -93,7 +129,7 @@ fun ProductSubject() {
 }
 
 @Composable
-fun ProductItem() {
+fun ProductItem(product: Product) {
     Card(
         modifier = Modifier
             .wrapContentSize()
@@ -105,16 +141,13 @@ fun ProductItem() {
             modifier = Modifier.wrapContentSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.img_intro),
-                contentDescription = "Product Subject Image",
+            AsyncImage(model = product.imgUrl,contentDescription = "Product Subject Image",
                 contentScale = ContentScale.FillWidth,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .size(250.dp)
-            )
+                    .size(250.dp))
 
-            ProductTextBox()
+            ProductTextBox(product)
 
         }
 
@@ -123,7 +156,7 @@ fun ProductItem() {
 }
 
 @Composable
-fun ProductTextBox() {
+fun ProductTextBox(product: Product) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -132,16 +165,16 @@ fun ProductTextBox() {
     ) {
         Column(Modifier.padding(10.dp)) {
             Text(
-                text = "Diamond Woman Watches",
+                text = product.name,
                 style = MaterialTheme.typography.h5,
                 modifier = Modifier.padding(bottom = 5.dp),
                 fontSize = 18.sp,
                 maxLines = 1
             )
 
-            Text(text = "86,000 Tomans", fontSize = 17.sp, color = Color.DarkGray)
+            Text(text = product.price, fontSize = 17.sp, color = Color.DarkGray)
 
-            Text(text = "156 sold", fontSize = 15.sp, color = Color.Gray)
+            Text(text = product.soldItem, fontSize = 15.sp, color = Color.Gray)
         }
 
     }
