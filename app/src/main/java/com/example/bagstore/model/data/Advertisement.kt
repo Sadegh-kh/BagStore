@@ -9,6 +9,7 @@ import androidx.room.PrimaryKey
 
 data class AdvertisementsResponse(
     val success: Boolean,
+    @SerializedName("ads")
     val advertisement: List<Advertisement>
 )
 
