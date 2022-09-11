@@ -33,6 +33,7 @@ class MainScreenViewModel(
                 productRepository.insertAllProduct(isInternetConnected)
                 productRepository.getAllProducts()
             }
+
             val loadedAdvertisement=async {productRepository.getAllAdvertisement(isInternetConnected)}
 
             updateDats(loadedProduct.await(),loadedAdvertisement.await())

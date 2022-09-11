@@ -1,5 +1,6 @@
 package com.example.bagstore.ui.features.mainScreen
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -31,7 +32,6 @@ import com.example.bagstore.util.NetworkChecker
 import com.example.bagstore.util.TAGS
 import dev.burnoo.cokoin.viewmodel.getViewModel
 import org.koin.core.parameter.parametersOf
-import java.util.*
 
 
 @Composable
@@ -49,10 +49,10 @@ fun MainScreen() {
         contentPadding = PaddingValues(bottom = 25.dp)
     ) {
         item {
-            val progressBarVisibility=viewModel.showProgressBar.value
-            val productList=viewModel.productState.value
-            val advertisementList=viewModel.advertisementState.value ?: listOf()
-            if (progressBarVisibility){
+            val progressBarVisibility = viewModel.showProgressBar.value
+            val productList = viewModel.productState.value
+            val advertisementList = viewModel.advertisementState.value ?: listOf()
+            if (progressBarVisibility) {
                 LinearProgressIndicator(
                     modifier = Modifier.fillMaxWidth(),
                     color = Blue
@@ -62,8 +62,8 @@ fun MainScreen() {
 
             CategoryBar(CATEGORY)
 
-            if (!progressBarVisibility){
-                BunchOfProduct(TAGS,productList,advertisementList)
+            if (!progressBarVisibility) {
+                BunchOfProduct(TAGS, productList, advertisementList)
             }
 
         }
@@ -77,40 +77,49 @@ fun BunchOfProduct(
     productList: List<Product>,
     advertisementList: List<Advertisement>
 ) {
-    Column {
-
-        tags.forEach {
-            val productFilterByTag=productList.filter { product->
-                product.tags==it
+    //random number for show a different place
+    val randomNumber = (0..3).shuffled().last()
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        tags.forEachIndexed { tagIndex, tag ->
+            val productFilterByTag = productList.filter { product ->
+                product.tags == tag
             }
-            ProductBar(it , productFilterByTag.shuffled())
+            ProductBar(tag, productFilterByTag.shuffled())
+
+            if (advertisementList.isNotEmpty()){
+                if (randomNumber == tagIndex) {
+                    AdvertisementBanner(advertisementList)
+                }
+            }
         }
 
     }
 }
 
 @Composable
-fun AdvertisementBanner() {
-
-    Image(
-        painter = painterResource(id = R.drawable.img_intro),
+fun AdvertisementBanner(advertisementList: List<Advertisement>) {
+    //show random advertisement
+    val randomIndex = (0..1).shuffled().last()
+    AsyncImage(model = advertisementList[randomIndex].imageURL,
         contentDescription = "advertisement",
         contentScale = ContentScale.FillWidth,
         modifier = Modifier
-            .fillMaxWidth(0.95f)
+            .fillMaxWidth(0.9f)
             .height(250.dp)
             .padding(top = 18.dp)
             .clip(Shapes.medium)
-            .clickable { })
+            .clickable { } )
 }
 
 @Composable
 fun ProductBar(tag: String, productFilterByTag: List<Product>) {
     Column {
-        val visibilityTag=if(productFilterByTag.isEmpty()){
-            ""
-        }else{
-            tag
+        val context = LocalContext.current
+        var visibilityTag = ""
+        if (productFilterByTag.isEmpty()) {
+            Toast.makeText(context, "please connect to the internet...", Toast.LENGTH_SHORT).show()
+        } else {
+            visibilityTag = tag
         }
 
         Text(
@@ -138,14 +147,15 @@ fun ProductItem(product: Product) {
         shape = Shapes.medium
     ) {
         Column(
-            modifier = Modifier.wrapContentSize(),
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier = Modifier.wrapContentSize()
         ) {
-            AsyncImage(model = product.imgUrl,contentDescription = "Product Subject Image",
-                contentScale = ContentScale.FillWidth,
+            AsyncImage(
+                model = product.imgUrl, contentDescription = "Product Subject Image",
+                contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .size(250.dp))
+                    .size(250.dp)
+            )
 
             ProductTextBox(product)
 
@@ -172,9 +182,14 @@ fun ProductTextBox(product: Product) {
                 maxLines = 1
             )
 
-            Text(text = product.price, fontSize = 17.sp, color = Color.DarkGray)
+            Text(text = product.price + " Tomans ", fontSize = 17.sp, color = Color.DarkGray)
 
-            Text(text = product.soldItem, fontSize = 15.sp, color = Color.Gray)
+            Text(
+                text = product.soldItem + " Sold",
+                fontSize = 15.sp,
+                color = Color.Gray,
+                modifier = Modifier.padding(top = 2.dp)
+            )
         }
 
     }
