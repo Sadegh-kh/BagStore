@@ -28,8 +28,10 @@ import com.example.bagstore.model.data.Advertisement
 import com.example.bagstore.model.data.Product
 import com.example.bagstore.ui.theme.*
 import com.example.bagstore.util.CATEGORY
+import com.example.bagstore.util.MyScreens
 import com.example.bagstore.util.NetworkChecker
 import com.example.bagstore.util.TAGS
+import dev.burnoo.cokoin.navigation.getNavController
 import dev.burnoo.cokoin.viewmodel.getViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -43,6 +45,7 @@ fun MainScreen() {
             parametersOf(NetworkChecker(context).isInternetConnected)
         }
     )
+    val navController= getNavController()
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -58,7 +61,12 @@ fun MainScreen() {
                     color = Blue
                 )
             }
-            TopToolBar()
+            TopToolBar(onClickShoppingCart = {
+                navController.navigate(MyScreens.ShoppingCardScreen.route)
+            },
+            onClickProfile = {
+                navController.navigate(MyScreens.ProfileScreen.route)
+            })
 
             CategoryBar(CATEGORY)
 
@@ -230,7 +238,7 @@ fun CategoryItem(categoryItem: Pair<String, Int>) {
 }
 
 @Composable
-fun TopToolBar() {
+fun TopToolBar(onClickShoppingCart:()->Unit,onClickProfile:()->Unit) {
     TopAppBar(
         elevation = 0.dp,
         backgroundColor = BackgroundMain,
@@ -239,12 +247,16 @@ fun TopToolBar() {
             .wrapContentHeight(Alignment.Top),
         title = { Text(text = "Bag Store") },
         actions = {
-            IconButton(onClick = {}) {
+            IconButton(onClick = {
+                onClickShoppingCart.invoke()
+            }) {
                 Icon(imageVector = Icons.Default.ShoppingCart, contentDescription = null)
 
             }
 
-            IconButton(onClick = {}) {
+            IconButton(onClick = {
+                onClickProfile.invoke()
+            }) {
                 Icon(imageVector = Icons.Default.Person, contentDescription = null)
 
             }

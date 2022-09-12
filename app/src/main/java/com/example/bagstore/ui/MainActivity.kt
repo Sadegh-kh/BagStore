@@ -15,6 +15,8 @@ import com.example.bagstore.model.repository.TokenInMemory
 import com.example.bagstore.model.repository.user.UserRepository
 import com.example.bagstore.ui.features.IntroScreen
 import com.example.bagstore.ui.features.mainScreen.MainScreen
+import com.example.bagstore.ui.features.profileScreen.ProfileScreen
+import com.example.bagstore.ui.features.shoppingCardScreen.ShoppingCardScreen
 import com.example.bagstore.ui.features.signInScreen.SignInScreen
 import com.example.bagstore.ui.features.singUpScreen.SignUpScreen
 import com.example.bagstore.ui.theme.MainAppTheme
@@ -80,6 +82,13 @@ fun BagStoreUi() {
         composable(MyScreens.SingInScreen.route) {
             SignInScreen()
         }
+        composable(MyScreens.ProfileScreen.route){
+            ProfileScreen()
+        }
+        composable(MyScreens.ShoppingCardScreen.route){
+            ShoppingCardScreen()
+        }
+
     }
 }
 
