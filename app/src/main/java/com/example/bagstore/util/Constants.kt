@@ -8,6 +8,8 @@ const val KEY_TOKEN="token"
 const val KEY_EMAIL_ADDRESS="emailAddress"
 const val VALUE_SUCCESS="Success"
 
+const val KEY_CATEGORY_ARG="categoryKey"
+
 val CATEGORY= listOf<Pair<String,Int>>(
     Pair("backpack", R.drawable.ic_cat_backpack),
     Pair("bucket", R.drawable.ic_cat_bucket),

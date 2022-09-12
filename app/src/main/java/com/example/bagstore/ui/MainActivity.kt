@@ -8,18 +8,22 @@ import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.bagstore.di.myModules
 import com.example.bagstore.model.repository.TokenInMemory
 import com.example.bagstore.model.repository.user.UserRepository
 import com.example.bagstore.ui.features.IntroScreen
+import com.example.bagstore.ui.features.categoryScreen.CategoryScreen
 import com.example.bagstore.ui.features.mainScreen.MainScreen
 import com.example.bagstore.ui.features.profileScreen.ProfileScreen
 import com.example.bagstore.ui.features.shoppingCardScreen.ShoppingCardScreen
 import com.example.bagstore.ui.features.signInScreen.SignInScreen
 import com.example.bagstore.ui.features.singUpScreen.SignUpScreen
 import com.example.bagstore.ui.theme.MainAppTheme
+import com.example.bagstore.util.KEY_CATEGORY_ARG
 import com.example.bagstore.util.MyScreens
 import dev.burnoo.cokoin.Koin
 import dev.burnoo.cokoin.get
@@ -87,6 +91,13 @@ fun BagStoreUi() {
         }
         composable(MyScreens.ShoppingCardScreen.route){
             ShoppingCardScreen()
+        }
+        composable(route = MyScreens.CategoryScreen.route+"/"+"{$KEY_CATEGORY_ARG}",
+        arguments = listOf(navArgument(KEY_CATEGORY_ARG){
+            type= NavType.StringType
+        })
+        ){
+            CategoryScreen(it.arguments!!.getString(KEY_CATEGORY_ARG,""))
         }
 
     }

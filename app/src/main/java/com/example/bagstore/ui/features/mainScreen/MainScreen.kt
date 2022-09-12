@@ -68,7 +68,9 @@ fun MainScreen() {
                 navController.navigate(MyScreens.ProfileScreen.route)
             })
 
-            CategoryBar(CATEGORY)
+            CategoryBar(CATEGORY, onClickCategory = {
+                navController.navigate(MyScreens.CategoryScreen.route +"/"+ it)
+            })
 
             if (!progressBarVisibility) {
                 BunchOfProduct(TAGS, productList, advertisementList)
@@ -204,17 +206,17 @@ fun ProductTextBox(product: Product) {
 }
 
 @Composable
-fun CategoryBar(category: List<Pair<String, Int>>) {
+fun CategoryBar(category: List<Pair<String, Int>>,onClickCategory: (String) -> Unit) {
     LazyRow(modifier = Modifier.padding(top = 16.dp), contentPadding = PaddingValues(end = 18.dp)) {
         items(category.size) {
-            CategoryItem(category[it])
+            CategoryItem(category[it],onClickCategory)
         }
 
     }
 }
 
 @Composable
-fun CategoryItem(categoryItem: Pair<String, Int>) {
+fun CategoryItem(categoryItem: Pair<String, Int>,onClickCategory: (String) -> Unit) {
     Column(
         modifier = Modifier.padding(start = 18.dp),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -226,7 +228,7 @@ fun CategoryItem(categoryItem: Pair<String, Int>) {
                 contentDescription = "categoryItem",
                 modifier = Modifier
                     .background(BackgroundBlue)
-                    .clickable { }
+                    .clickable{ onClickCategory.invoke(categoryItem.first)}
                     .padding(18.dp)
             )
 
