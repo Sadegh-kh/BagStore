@@ -9,6 +9,7 @@ const val KEY_EMAIL_ADDRESS="emailAddress"
 const val VALUE_SUCCESS="Success"
 
 const val KEY_CATEGORY_ARG="categoryKey"
+const val KEY_PRODUCT_ARG="productKey"
 
 val CATEGORY= listOf<Pair<String,Int>>(
     Pair("backpack", R.drawable.ic_cat_backpack),

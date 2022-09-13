@@ -23,7 +23,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.example.bagstore.R
 import com.example.bagstore.model.data.Advertisement
 import com.example.bagstore.model.data.Product
 import com.example.bagstore.ui.theme.*
@@ -61,19 +60,24 @@ fun MainScreen() {
                     color = Blue
                 )
             }
+
             TopToolBar(onClickShoppingCart = {
                 navController.navigate(MyScreens.ShoppingCardScreen.route)
             },
-            onClickProfile = {
+            onProfileClicked = {
                 navController.navigate(MyScreens.ProfileScreen.route)
             })
 
-            CategoryBar(CATEGORY, onClickCategory = {
+            CategoryBar(CATEGORY, onCategoryClicked = {
                 navController.navigate(MyScreens.CategoryScreen.route +"/"+ it)
             })
 
             if (!progressBarVisibility) {
-                BunchOfProduct(TAGS, productList, advertisementList)
+
+                BunchOfProduct(TAGS, productList, advertisementList){
+                    navController.navigate(MyScreens.ProductScreen.route+"/"+it)
+                }
+
             }
 
         }
@@ -85,25 +89,28 @@ fun MainScreen() {
 fun BunchOfProduct(
     tags: List<String>,
     productList: List<Product>,
-    advertisementList: List<Advertisement>
+    advertisementList: List<Advertisement>,onProductClicked:(String)->Unit
 ) {
     //random number for show a advertisement to different place
     val randomNumber = (0..3).shuffled().last()
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
+
         tags.forEachIndexed { tagIndex, tag ->
 
             val productFilterByTag = productList.filter { product ->
                 product.tags == tag
             }
 
-            ProductBar(tag, productFilterByTag.shuffled())
+            ProductBar(tag, productFilterByTag.shuffled(),onProductClicked)
 
             if (advertisementList.isNotEmpty()){
                 if (randomNumber == tagIndex) {
                     AdvertisementBanner(advertisementList)
                 }
             }
+
         }
+
 
     }
 }
@@ -124,7 +131,7 @@ fun AdvertisementBanner(advertisementList: List<Advertisement>) {
 }
 
 @Composable
-fun ProductBar(tag: String, productFilterByTag: List<Product>) {
+fun ProductBar(tag: String, productFilterByTag: List<Product>,onProductClicked:(String)->Unit) {
     Column {
         val context = LocalContext.current
         var visibilityTag = ""
@@ -142,7 +149,7 @@ fun ProductBar(tag: String, productFilterByTag: List<Product>) {
         )
         LazyRow(contentPadding = PaddingValues(end = 20.dp)) {
             items(productFilterByTag.size) {
-                ProductItem(productFilterByTag[it])
+                ProductItem(productFilterByTag[it],onProductClicked)
             }
         }
 
@@ -150,12 +157,12 @@ fun ProductBar(tag: String, productFilterByTag: List<Product>) {
 }
 
 @Composable
-fun ProductItem(product: Product) {
+fun ProductItem(product: Product,onProductClicked:(String)->Unit) {
     Card(
         modifier = Modifier
             .wrapContentSize()
             .padding(start = 20.dp)
-            .clickable { },
+            .clickable { onProductClicked.invoke(product.productId) },
         shape = Shapes.medium
     ) {
         Column(
@@ -208,17 +215,17 @@ fun ProductTextBox(product: Product) {
 }
 
 @Composable
-fun CategoryBar(category: List<Pair<String, Int>>,onClickCategory: (String) -> Unit) {
+fun CategoryBar(category: List<Pair<String, Int>>, onCategoryClicked: (String) -> Unit) {
     LazyRow(modifier = Modifier.padding(top = 16.dp), contentPadding = PaddingValues(end = 18.dp)) {
         items(category.size) {
-            CategoryItem(category[it],onClickCategory)
+            CategoryItem(category[it],onCategoryClicked)
         }
 
     }
 }
 
 @Composable
-fun CategoryItem(categoryItem: Pair<String, Int>,onClickCategory: (String) -> Unit) {
+fun CategoryItem(categoryItem: Pair<String, Int>, onCategoryClicked: (String) -> Unit) {
     Column(
         modifier = Modifier.padding(start = 18.dp),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -230,7 +237,7 @@ fun CategoryItem(categoryItem: Pair<String, Int>,onClickCategory: (String) -> Un
                 contentDescription = "categoryItem",
                 modifier = Modifier
                     .background(BackgroundBlue)
-                    .clickable{ onClickCategory.invoke(categoryItem.first)}
+                    .clickable{ onCategoryClicked.invoke(categoryItem.first)}
                     .padding(18.dp)
             )
 
@@ -242,7 +249,7 @@ fun CategoryItem(categoryItem: Pair<String, Int>,onClickCategory: (String) -> Un
 }
 
 @Composable
-fun TopToolBar(onClickShoppingCart:()->Unit,onClickProfile:()->Unit) {
+fun TopToolBar(onClickShoppingCart:()->Unit, onProfileClicked:()->Unit) {
     TopAppBar(
         elevation = 0.dp,
         backgroundColor = BackgroundMain,
@@ -259,7 +266,7 @@ fun TopToolBar(onClickShoppingCart:()->Unit,onClickProfile:()->Unit) {
             }
 
             IconButton(onClick = {
-                onClickProfile.invoke()
+                onProfileClicked.invoke()
             }) {
                 Icon(imageVector = Icons.Default.Person, contentDescription = null)
 

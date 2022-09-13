@@ -18,12 +18,14 @@ import com.example.bagstore.model.repository.user.UserRepository
 import com.example.bagstore.ui.features.IntroScreen
 import com.example.bagstore.ui.features.categoryScreen.CategoryScreen
 import com.example.bagstore.ui.features.mainScreen.MainScreen
+import com.example.bagstore.ui.features.productScreen.ProductScreen
 import com.example.bagstore.ui.features.profileScreen.ProfileScreen
 import com.example.bagstore.ui.features.shoppingCardScreen.ShoppingCardScreen
 import com.example.bagstore.ui.features.signInScreen.SignInScreen
 import com.example.bagstore.ui.features.singUpScreen.SignUpScreen
 import com.example.bagstore.ui.theme.MainAppTheme
 import com.example.bagstore.util.KEY_CATEGORY_ARG
+import com.example.bagstore.util.KEY_PRODUCT_ARG
 import com.example.bagstore.util.MyScreens
 import dev.burnoo.cokoin.Koin
 import dev.burnoo.cokoin.get
@@ -40,13 +42,14 @@ class MainActivity : ComponentActivity() {
         setContent {
             Koin(appDeclaration = {
                 androidContext(this@MainActivity)
-                modules(myModules)}
+                modules(myModules)
+            }
             ) {
                 MainAppTheme {
                     Surface(
                         modifier = Modifier.fillMaxSize()
                     ) {
-                        val userRepository:UserRepository=get()
+                        val userRepository: UserRepository = get()
                         userRepository.loadToken()
                         BagStoreUi()
                     }
@@ -61,14 +64,13 @@ class MainActivity : ComponentActivity() {
 fun BagStoreUi() {
     val navController = rememberNavController()
 
-    val startDestinationScreen=if (TokenInMemory.token==null){
+    val startDestinationScreen = if (TokenInMemory.token == null) {
         MyScreens.IntroScreen.route
-    }else{
+    } else {
         MyScreens.MainScreen.route
     }
 
     KoinNavHost(navController = navController, startDestination = startDestinationScreen) {
-
         composable(MyScreens.MainScreen.route) {
             MainScreen()
         }
@@ -86,18 +88,26 @@ fun BagStoreUi() {
         composable(MyScreens.SingInScreen.route) {
             SignInScreen()
         }
-        composable(MyScreens.ProfileScreen.route){
+        composable(MyScreens.ProfileScreen.route) {
             ProfileScreen()
         }
-        composable(MyScreens.ShoppingCardScreen.route){
+        composable(MyScreens.ShoppingCardScreen.route) {
             ShoppingCardScreen()
         }
-        composable(route = MyScreens.CategoryScreen.route+"/"+"{$KEY_CATEGORY_ARG}",
-        arguments = listOf(navArgument(KEY_CATEGORY_ARG){
-            type= NavType.StringType
-        })
-        ){
-            CategoryScreen(it.arguments!!.getString(KEY_CATEGORY_ARG,""))
+        composable(
+            route = MyScreens.CategoryScreen.route + "/{$KEY_CATEGORY_ARG}",
+            arguments = listOf(navArgument(KEY_CATEGORY_ARG) {
+                type = NavType.StringType
+            })
+        ) {
+            CategoryScreen(it.arguments!!.getString(KEY_CATEGORY_ARG, ""))
+        }
+        composable(route = MyScreens.ProductScreen.route + "/{$KEY_PRODUCT_ARG}",
+            arguments = listOf(navArgument(KEY_PRODUCT_ARG) {
+                type = NavType.StringType
+            })
+        ) {
+            ProductScreen(productId = it.arguments!!.getString(KEY_PRODUCT_ARG, ""))
         }
 
     }
