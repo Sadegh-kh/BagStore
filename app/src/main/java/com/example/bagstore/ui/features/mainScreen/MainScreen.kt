@@ -54,7 +54,7 @@ fun MainScreen() {
         item {
             val progressBarVisibility = viewModel.showProgressBar.value
             val productList = viewModel.productState.value
-            val advertisementList = viewModel.advertisementState.value ?: listOf()
+            val advertisementList = viewModel.advertisementState.value
             if (progressBarVisibility) {
                 LinearProgressIndicator(
                     modifier = Modifier.fillMaxWidth(),
@@ -87,13 +87,15 @@ fun BunchOfProduct(
     productList: List<Product>,
     advertisementList: List<Advertisement>
 ) {
-    //random number for show a different place
+    //random number for show a advertisement to different place
     val randomNumber = (0..3).shuffled().last()
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         tags.forEachIndexed { tagIndex, tag ->
+
             val productFilterByTag = productList.filter { product ->
                 product.tags == tag
             }
+
             ProductBar(tag, productFilterByTag.shuffled())
 
             if (advertisementList.isNotEmpty()){
@@ -112,7 +114,7 @@ fun AdvertisementBanner(advertisementList: List<Advertisement>) {
     val randomIndex = (0..1).shuffled().last()
     AsyncImage(model = advertisementList[randomIndex].imageURL,
         contentDescription = "advertisement",
-        contentScale = ContentScale.FillWidth,
+        contentScale = ContentScale.Crop,
         modifier = Modifier
             .fillMaxWidth(0.9f)
             .height(250.dp)

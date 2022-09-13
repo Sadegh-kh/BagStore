@@ -15,6 +15,9 @@ data class ProductResponse(
 @Entity
 @Parcelize
 data class Product(
+    @SerializedName("productId")
+    @PrimaryKey
+    val productId: String,
     @SerializedName("category")
     val category: String,
     @SerializedName("detailText")
@@ -27,9 +30,6 @@ data class Product(
     val name: String,
     @SerializedName("price")
     val price: String,
-    @SerializedName("productId")
-    @PrimaryKey
-    val productId: String,
     @SerializedName("soldItem")
     val soldItem: String,
     @SerializedName("tags")
