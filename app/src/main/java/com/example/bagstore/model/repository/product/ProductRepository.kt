@@ -10,4 +10,6 @@ interface ProductRepository {
 
     suspend fun insertAllProduct(isInternetConnected: Boolean)
 
+    suspend fun getProductsByCategoryName(categoryName:String):List<Product>
+
 }
