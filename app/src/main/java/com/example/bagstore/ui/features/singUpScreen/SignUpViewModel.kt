@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.bagstore.model.repository.user.UserRepository
+import com.example.bagstore.util.coroutineExceptionHandler
 import kotlinx.coroutines.launch
 
 class SignUpViewModel(private val userRepository: UserRepository) : ViewModel() {
@@ -33,7 +34,7 @@ class SignUpViewModel(private val userRepository: UserRepository) : ViewModel() 
     }
 
     fun signUp(LoginEvent:(String)->Unit){
-        viewModelScope.launch {
+        viewModelScope.launch (context = coroutineExceptionHandler) {
            val messageFormServer= userRepository.signUp(nameState.value!!,emailState.value!!, passwordState.value!!)
             LoginEvent(messageFormServer)
         }.also {

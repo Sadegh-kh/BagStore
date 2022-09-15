@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.bagstore.model.data.Advertisement
 import com.example.bagstore.model.data.Product
 import com.example.bagstore.model.repository.product.ProductRepository
+import com.example.bagstore.util.coroutineExceptionHandler
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -23,7 +24,7 @@ class MainScreenViewModel(
     }
 
     private fun getAllDatsFormServer(isInternetConnected: Boolean) {
-        viewModelScope.launch{
+        viewModelScope.launch(context = coroutineExceptionHandler){
             showProgressBar.value=true
 
             //delay for 2 second for fun :D

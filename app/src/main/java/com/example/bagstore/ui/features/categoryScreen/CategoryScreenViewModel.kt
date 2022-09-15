@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.bagstore.model.data.Product
 import com.example.bagstore.model.repository.product.ProductRepository
+import com.example.bagstore.util.coroutineExceptionHandler
 import kotlinx.coroutines.launch
 
 
@@ -19,7 +20,7 @@ class CategoryScreenViewModel(
        getProductByCategoryName(category)
     }
     private fun getProductByCategoryName(category: String){
-        viewModelScope.launch {
+        viewModelScope.launch(context = coroutineExceptionHandler) {
             val categoryProduct=productRepository.getProductsByCategoryName(category)
             categoryProductState.value=categoryProduct
         }
