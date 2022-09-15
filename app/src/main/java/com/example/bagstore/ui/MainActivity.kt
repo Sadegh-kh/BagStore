@@ -23,10 +23,12 @@ import com.example.bagstore.ui.features.profileScreen.ProfileScreen
 import com.example.bagstore.ui.features.shoppingCardScreen.ShoppingCardScreen
 import com.example.bagstore.ui.features.signInScreen.SignInScreen
 import com.example.bagstore.ui.features.singUpScreen.SignUpScreen
+import com.example.bagstore.ui.theme.BackgroundMain
 import com.example.bagstore.ui.theme.MainAppTheme
 import com.example.bagstore.util.KEY_CATEGORY_ARG
 import com.example.bagstore.util.KEY_PRODUCT_ARG
 import com.example.bagstore.util.MyScreens
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dev.burnoo.cokoin.Koin
 import dev.burnoo.cokoin.get
 import dev.burnoo.cokoin.navigation.KoinNavHost
@@ -63,6 +65,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun BagStoreUi() {
     val navController = rememberNavController()
+    val systemUiController= rememberSystemUiController()
 
     val startDestinationScreen = if (TokenInMemory.token == null) {
         MyScreens.IntroScreen.route
@@ -71,7 +74,9 @@ fun BagStoreUi() {
     }
 
     KoinNavHost(navController = navController, startDestination = startDestinationScreen) {
+
         composable(MyScreens.MainScreen.route) {
+            systemUiController.setStatusBarColor(color = BackgroundMain, darkIcons = true)
             MainScreen()
         }
 
