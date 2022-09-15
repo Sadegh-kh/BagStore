@@ -16,6 +16,8 @@ interface ProductDao {
     @Query("SELECT * FROM Product WHERE productId = :idProduct")
     suspend fun getProductById(idProduct:String):Product
 
+    @Query("SELECT * FROM Product WHERE category LIKE :categoryName")
+    suspend fun getProductByCategoryName(categoryName:String):List<Product>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insetAllProducts(productList: List<Product>)
