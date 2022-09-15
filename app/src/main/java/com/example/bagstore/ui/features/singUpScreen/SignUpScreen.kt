@@ -5,8 +5,10 @@ import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Error
@@ -23,6 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -62,8 +65,8 @@ fun SignUpScreen() {
         }
     }*/
 
-    val systemUiController= rememberSystemUiController()
-    systemUiController.setStatusBarColor(color = Blue,darkIcons = false)
+    val systemUiController = rememberSystemUiController()
+    systemUiController.setStatusBarColor(color = Blue, darkIcons = false)
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
         Box(
             modifier = Modifier
@@ -76,17 +79,19 @@ fun SignUpScreen() {
             verticalArrangement = Arrangement.Top,
             modifier = Modifier
                 .fillMaxSize()
+                .verticalScroll(rememberScrollState())
         ) {
             ShapeImage()
             CardViewSignUp()
         }
     }
-    Box(modifier = Modifier.fillMaxSize(), Alignment.Center) {
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
 
         ProgressDialogSignUp()
     }
 
 }
+
 @Composable
 fun ProgressDialogSignUp() {
     val viewModel = getNavViewModel<SignUpViewModel>()
@@ -171,23 +176,23 @@ fun CardViewSignUp() {
             Button(
                 onClick = {
                     checkFields(viewModel, context)
-                    val errorResult=errorStates(viewModel,context)
+                    val errorResult = errorStates(viewModel, context)
 
-                    if (!errorResult){
+                    if (!errorResult) {
 
                         viewModel.signUp {
 
-                            if (it== VALUE_SUCCESS){
+                            if (it == VALUE_SUCCESS) {
 
-                               navController.navigate(MyScreens.MainScreen.route){
-                                   popUpTo(MyScreens.IntroScreen.route){
-                                       inclusive=true
-                                   }
-                               }
+                                navController.navigate(MyScreens.MainScreen.route) {
+                                    popUpTo(MyScreens.IntroScreen.route) {
+                                        inclusive = true
+                                    }
+                                }
 
-                            }else{
+                            } else {
                                 Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
-                                viewModel.progressState.value=false
+                                viewModel.progressState.value = false
                             }
                         }
                     }
@@ -224,13 +229,13 @@ fun CardViewSignUp() {
 }
 
 fun errorStates(viewModel: SignUpViewModel, context: Context): Boolean {
-    val errorStateName=viewModel.errorStateForName.value!!
-    val errorStateEmail=viewModel.errorStateForEmail.value!!
-    val errorStatePassword=viewModel.errorStateForPassword.value!!
-    val errorStateConfigPassword=viewModel.errorStateForConfigPassword.value!!
-    val netDisconnected=!NetworkChecker(context).isInternetConnected
+    val errorStateName = viewModel.errorStateForName.value!!
+    val errorStateEmail = viewModel.errorStateForEmail.value!!
+    val errorStatePassword = viewModel.errorStateForPassword.value!!
+    val errorStateConfigPassword = viewModel.errorStateForConfigPassword.value!!
+    val netDisconnected = !NetworkChecker(context).isInternetConnected
 
-    return (errorStateName||errorStateEmail||errorStatePassword||errorStateConfigPassword||netDisconnected)
+    return (errorStateName || errorStateEmail || errorStatePassword || errorStateConfigPassword || netDisconnected)
 }
 
 fun checkFields(viewModel: SignUpViewModel, context: Context) {
@@ -260,12 +265,12 @@ fun checkFields(viewModel: SignUpViewModel, context: Context) {
         //check if name and email fields are complete and isn't connected show me a massage
         //and it's in there because password fields are complete and they are same,
         //can show me that
-        else{
-            val errorStateList= (viewModel.errorStateForName.value!! &&
-                    viewModel.errorStateForEmail.value!! )
+        else {
+            val errorStateList = (viewModel.errorStateForName.value!! &&
+                    viewModel.errorStateForEmail.value!!)
 
-            val networkChecker=NetworkChecker(context)
-            if (!networkChecker.isInternetConnected && !errorStateList){
+            val networkChecker = NetworkChecker(context)
+            if (!networkChecker.isInternetConnected && !errorStateList) {
                 Toast.makeText(context, "check your connection !! ", Toast.LENGTH_SHORT).show()
             }
         }
@@ -341,7 +346,8 @@ fun ColumnInfo(viewModel: SignUpViewModel) {
 
 @Composable
 fun TextFieldInfo(
-    hint: String, error: Boolean, icon: Int, text: String, textFieldChange: (String) -> Unit
+    hint: String, error: Boolean, icon: Int, text: String
+    , textFieldChange: (String) -> Unit
 ) {
     Column(modifier = Modifier.padding(bottom = 10.dp)) {
         OutlinedTextField(
@@ -379,6 +385,11 @@ fun TextFieldInfo(
                         tint = MaterialTheme.colors.error
                     )
                 }
+            },
+            keyboardOptions = if (icon==R.drawable.ic_email){
+                KeyboardOptions(keyboardType = KeyboardType.Email)
+            }else{
+                KeyboardOptions(keyboardType = KeyboardType.Text)
             }
         )
         if (error) {
@@ -477,7 +488,6 @@ fun TextFieldPassword(
     }
 
 }
-
 
 
 @Composable

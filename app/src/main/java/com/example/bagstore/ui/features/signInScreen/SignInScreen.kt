@@ -2,8 +2,7 @@ package com.example.bagstore.ui.features.signInScreen
 
 import android.content.Context
 import android.widget.Toast
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -41,8 +40,8 @@ import dev.burnoo.cokoin.navigation.getNavViewModel
 
 @Composable
 fun SignInScreen() {
-    val systemUiController= rememberSystemUiController()
-    systemUiController.setStatusBarColor(color = Blue,darkIcons = false)
+    val systemUiController = rememberSystemUiController()
+    systemUiController.setStatusBarColor(color = Blue, darkIcons = false)
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
         Box(
             modifier = Modifier
@@ -56,6 +55,7 @@ fun SignInScreen() {
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight(0.9f)
+                .verticalScroll(rememberScrollState())
         ) {
             ShapeImage()
             CardViewSingUp()
@@ -202,7 +202,7 @@ fun sendInfo(viewModel: SignInViewModel, navController: NavHostController, conte
             }
         } else {
             Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
-            viewModel.progressState.value=false
+            viewModel.progressState.value = false
         }
     }
     if (jobSignIn.isActive) {
@@ -324,7 +324,8 @@ fun TextFieldInfo(
                         tint = MaterialTheme.colors.error
                     )
                 }
-            }
+            },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
         )
         if (error) {
             Text(
@@ -413,8 +414,6 @@ fun TextFieldPassword(
     }
 
 }
-
-
 
 
 @Preview(showBackground = true)
