@@ -21,6 +21,8 @@ import com.example.bagstore.model.data.Product
 import com.example.bagstore.ui.theme.BackgroundMain
 import com.example.bagstore.ui.theme.Blue
 import com.example.bagstore.ui.theme.Shapes
+import com.example.bagstore.util.MyScreens
+import dev.burnoo.cokoin.navigation.getNavController
 import dev.burnoo.cokoin.viewmodel.getViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -31,6 +33,11 @@ fun CategoryScreen(categoryName: String) {
             parametersOf(categoryName)
         }
     )
+    val navController= getNavController()
+    //navigate to product screen and transfer product id
+    val onProductClicked:(String)->Unit={ productId->
+        navController.navigate(MyScreens.ProductScreen.route+"/$productId")
+    }
 
     val productList=viewModel.categoryProductState.value
     LazyColumn(
@@ -58,7 +65,7 @@ fun CategoryScreen(categoryName: String) {
         }
 
         items(productList.size){
-            Product(productList[it])
+            Product(productList[it],onProductClicked)
         }
 
     }
@@ -66,13 +73,13 @@ fun CategoryScreen(categoryName: String) {
 }
 
 @Composable
-fun Product(product: Product) {
+fun Product(product: Product,onProductClicked:(String)->Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth(0.92f)
             .height(300.dp)
             .padding(bottom = 20.dp)
-            .clickable { },
+            .clickable { onProductClicked.invoke(product.productId)},
         elevation = 4.dp
     ) {
         Column {
@@ -117,8 +124,8 @@ fun ProductInfo(product: Product) {
 
             Text(text = product.soldItem +" Sold"
                 ,modifier = Modifier
-                .background(Blue)
-                .padding(8.dp), color = Color.White)
+                    .background(Blue)
+                    .padding(8.dp), color = Color.White)
 
         }
     }
