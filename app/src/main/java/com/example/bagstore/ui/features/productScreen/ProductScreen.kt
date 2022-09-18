@@ -1,8 +1,12 @@
 package com.example.bagstore.ui.features.productScreen
 
+import android.graphics.Paint
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -21,7 +25,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.bagstore.ui.theme.BackgroundMain
 import com.example.bagstore.R
+import com.example.bagstore.ui.theme.Blue
 import com.example.bagstore.ui.theme.Shapes
+import com.example.bagstore.ui.theme.tagShape
 
 @Composable
 fun ProductScreen(productId: String) {
@@ -56,14 +62,92 @@ fun ProductScreen(productId: String) {
         ProductImage(this)
         ProductDescription()
 
+        Divider()
+
+        ProductDetails()
+
+        Divider()
+
 
     }
 
 }
 
 @Composable
+fun ProductDetails() {
+    Row(modifier = Modifier
+        .padding(10.dp)
+        .fillMaxWidth()) {
+        Column {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_details_comment),
+                    contentDescription = "commentDetail"
+                )
+                Text(
+                    text = "6 Comments",
+                    fontSize = 12.sp,
+                    modifier = Modifier.padding(start = 8.dp)
+                )
+            }
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(top = 10.dp)
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_details_material),
+                    contentDescription = "materialDetail"
+                )
+                Text(
+                    text = "Leather",
+                    fontSize = 12.sp,
+                    modifier = Modifier.padding(start = 8.dp)
+                )
+            }
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(top = 10.dp)
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_details_sold),
+                    contentDescription = "soldDetail"
+                )
+                Text(
+                    text = "50 Sold",
+                    fontSize = 12.sp,
+                    modifier = Modifier.padding(start = 8.dp)
+                )
+            }
+
+        }
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        Box(contentAlignment = Alignment.CenterEnd,
+            modifier = Modifier
+                .align(Alignment.Bottom)
+                .clip(tagShape)
+        ) {
+
+            Text(
+                text = "Best Sellers",
+                Modifier
+                    .background(Blue)
+                    .padding(10.dp)
+                    .padding(start = 15.dp),
+                fontSize = 12.sp,
+                color = Color.White
+            )
+
+        }
+    }
+}
+
+@Composable
 fun ProductDescription() {
-    Column(modifier = Modifier.padding(10.dp)) {
+    Column(modifier = Modifier.padding(horizontal = 10.dp).padding(top = 10.dp)) {
         Text(text = "Mahi", style = MaterialTheme.typography.h6, fontSize = 20.sp)
 
         Spacer(modifier = Modifier.padding(top = 10.dp))
@@ -76,8 +160,6 @@ fun ProductDescription() {
         TextButton(onClick = { /*TODO*/ }, modifier = Modifier.padding(10.dp)) {
             Text(text = "#Clutch")
         }
-
-        Divider()
     }
 }
 
