@@ -1,17 +1,16 @@
 package com.example.bagstore.ui.features.productScreen
 
-import android.graphics.Paint
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import android.util.Log
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CutCornerShape
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,7 +18,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -31,53 +32,142 @@ import com.example.bagstore.ui.theme.tagShape
 
 @Composable
 fun ProductScreen(productId: String) {
-    Column(modifier = Modifier.verticalScroll(state = rememberScrollState())) {
-        TopAppBar(backgroundColor = BackgroundMain, navigationIcon = {
-            IconButton(onClick = { /*TODO*/ }) {
-                Icon(
-                    imageVector = Icons.Default.ArrowBack,
-                    contentDescription = "onBack"
+    Scaffold(
+        topBar = {
+            TopAppBar(backgroundColor = BackgroundMain, navigationIcon = {
+                IconButton(onClick = { /*TODO*/ }) {
+                    Icon(
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = "onBack"
+                    )
+                }
+            }, title = {
+                Text(
+                    text = "Details",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(end = 20.dp),
+                    textAlign = TextAlign.Center,
+                    fontSize = 20.sp,
                 )
+            }, actions = {
+                IconButton(onClick = { /*TODO*/ }) {
+                    Icon(
+                        imageVector = Icons.Default.ShoppingCart,
+                        contentDescription = "onShoppingCard"
+                    )
+                }
+            })
+        }) {
+        LazyColumn(modifier = Modifier.padding(horizontal = 10.dp)) {
+            item {
+
+                Spacer(modifier = Modifier.padding(top = 15.dp))
+
+                ProductImage()
+                ProductDescription()
+
+                Divider()
+
+                ProductDetails()
+
+                Divider()
+
+                ProductComments(this@LazyColumn)
             }
-        }, title = {
+        }
+    }
+}
+
+@Composable
+fun ProductComments(lazyListScope: LazyListScope) {
+    lazyListScope.item {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             Text(
-                text = "Details",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(end = 20.dp),
-                textAlign = TextAlign.Center,
-                fontSize = 20.sp,
+                text = "Comments", fontSize = 20.sp, style = MaterialTheme.typography.h6
             )
-        }, actions = {
-            IconButton(onClick = { /*TODO*/ }) {
-                Icon(
-                    imageVector = Icons.Default.ShoppingCart,
-                    contentDescription = "onShoppingCard"
-                )
+            Spacer(modifier = Modifier.weight(1f))
+
+            TextButton(onClick = {}, modifier = Modifier.align(Alignment.Top)) {
+                Text(text = "Add New Comment", fontSize = 15.sp)
             }
-        })
-
-        Spacer(modifier = Modifier.padding(top = 15.dp))
-
-        ProductImage(this)
-        ProductDescription()
-
-        Divider()
-
-        ProductDetails()
-
-        Divider()
-
-
+        }
     }
 
+    lazyListScope.items(3) {
+        CommentItem()
+    }
+
+    lazyListScope.item {
+        MoreComment()
+    }
+}
+
+@Composable
+fun MoreComment() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth(), contentAlignment = Alignment.Center
+    ) {
+        Column(modifier = Modifier
+            .clip(CircleShape)
+            .clickable { Log.v("click", "click") }
+            .padding(10.dp)) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_more),
+                contentDescription = "MoreComment",
+                modifier = Modifier
+                    .border(width = 2.dp, color = Color.Black, shape = CircleShape)
+                    .size(40.dp)
+            )
+            Text(text = "More", fontSize = 15.sp)
+        }
+
+    }
+}
+
+@Composable
+fun CommentItem() {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+            .padding(bottom = 10.dp)
+            .border(
+                border = BorderStroke(width = 1.dp, color = Color.LightGray),
+                shape = Shapes.medium
+            )
+    ) {
+        Column(modifier = Modifier.padding(10.dp)) {
+            Text(
+                text = "SadeghKhoshbayan1@gmail.com",
+                maxLines = 1,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.fillMaxWidth(),
+                overflow = TextOverflow.Ellipsis
+            )
+
+            Text(
+                text = "Alie Bud!!     sa",
+                textAlign = TextAlign.Justify,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.padding(top = 5.dp)
+            )
+        }
+    }
 }
 
 @Composable
 fun ProductDetails() {
-    Row(modifier = Modifier
-        .padding(10.dp)
-        .fillMaxWidth()) {
+    Row(
+        modifier = Modifier
+            .padding(10.dp)
+            .fillMaxWidth()
+    ) {
         Column {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -125,7 +215,8 @@ fun ProductDetails() {
 
         Spacer(modifier = Modifier.weight(1f))
 
-        Box(contentAlignment = Alignment.CenterEnd,
+        Box(
+            contentAlignment = Alignment.CenterEnd,
             modifier = Modifier
                 .align(Alignment.Bottom)
                 .clip(tagShape)
@@ -147,7 +238,10 @@ fun ProductDetails() {
 
 @Composable
 fun ProductDescription() {
-    Column(modifier = Modifier.padding(horizontal = 10.dp).padding(top = 10.dp)) {
+    Column(
+        modifier = Modifier
+            .padding(top = 10.dp)
+    ) {
         Text(text = "Mahi", style = MaterialTheme.typography.h6, fontSize = 20.sp)
 
         Spacer(modifier = Modifier.padding(top = 10.dp))
@@ -164,25 +258,20 @@ fun ProductDescription() {
 }
 
 @Composable
-fun ProductImage(columnScope: ColumnScope) {
-    columnScope.apply {
-        Image(
-            painter = painterResource(id = R.drawable.img_intro),
-            contentDescription = "ProductImage",
-            modifier = Modifier
-                .fillMaxWidth(0.95f)
-                .height(250.dp)
-                .clip(Shapes.medium)
-                .align(Alignment.CenterHorizontally),
-            contentScale = ContentScale.Crop
-        )
-    }
+fun ProductImage() {
+    Image(
+        painter = painterResource(id = R.drawable.img_intro),
+        contentDescription = "ProductImage",
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(250.dp)
+            .clip(Shapes.medium),
+        contentScale = ContentScale.Crop
+    )
 }
 
 
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
-
-    ProductScreen(productId = "2")
 }
