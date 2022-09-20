@@ -284,6 +284,7 @@ fun ProductDescription() {
         Text(
             text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ornare mi porta lacus tempor elementum. Vestibulum hendrerit ipsum ac enim rutrum, quis sagittis diam scelerisque. Aenean consequat, enim nec convallis volutpat, magna arcu dapibus risus, non aliquam nulla mi a augue. Maecenas in enim pharetra, placerat orci ac, volutpat urna. Quisque luctus facilisis urna auctor bibendum. Ut ac neque tortor. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Suspendisse lobortis fermentum dapibus. Ut tempus sodales libero ut pellentesque. Aliquam pellentesque accumsan scelerisque. Duis consectetur tortor augue, at porttitor odio elementum interdum.",
             textAlign = TextAlign.Justify,
+            lineHeight = 25.sp
         )
 
         TextButton(onClick = { /*TODO*/ }, modifier = Modifier.padding(10.dp)) {
