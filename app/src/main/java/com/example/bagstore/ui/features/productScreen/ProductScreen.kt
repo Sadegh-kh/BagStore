@@ -1,71 +1,97 @@
 package com.example.bagstore.ui.features.productScreen
 
-import android.util.Log
 import androidx.compose.foundation.*
-import androidx.compose.foundation.interaction.InteractionSource
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
+import androidx.compose.material.Card
+import androidx.compose.material.Divider
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.example.bagstore.ui.theme.BackgroundMain
+import androidx.compose.ui.unit.*
 import com.example.bagstore.R
 import com.example.bagstore.ui.theme.Blue
 import com.example.bagstore.ui.theme.Shapes
 import com.example.bagstore.ui.theme.tagShape
 
+@ExperimentalMaterial3Api
 @Composable
 fun ProductScreen(productId: String) {
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+
+    //set background color when scrolled
+    val topAppBarBackgroundColor = TopAppBarDefaults.centerAlignedTopAppBarColors(
+        scrolledContainerColor = androidx.compose.material3.MaterialTheme.colorScheme.surfaceColorAtElevation(
+            0.dp
+        )
+    )
+
     Scaffold(
+
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+
         topBar = {
-            TopAppBar(backgroundColor = BackgroundMain, navigationIcon = {
-                IconButton(onClick = { /*TODO*/ }) {
-                    Icon(
-                        imageVector = Icons.Default.ArrowBack,
-                        contentDescription = "onBack"
-                    )
-                }
-            }, title = {
-                Text(
-                    text = "Details",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(end = 20.dp),
-                    textAlign = TextAlign.Center,
-                    fontSize = 20.sp,
+            Surface(elevation = 5.dp) {
+                TopAppBar(
+                    navigationIcon = {
+                        IconButton(onClick = { /*TODO*/ }) {
+                            Icon(
+                                imageVector = Icons.Default.ArrowBack,
+                                contentDescription = "onBack"
+                            )
+                        }
+                    },
+                    title = {
+                        Text(
+                            text = "Details",
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(end = 20.dp),
+                            textAlign = TextAlign.Center,
+                            fontSize = 20.sp,
+                        )
+                    },
+                    actions = {
+                        IconButton(onClick = { /*TODO*/ }) {
+                            Icon(
+                                imageVector = Icons.Default.ShoppingCart,
+                                contentDescription = "onShoppingCard"
+                            )
+                        }
+                    },
+                    scrollBehavior = scrollBehavior,
+                    colors = topAppBarBackgroundColor
                 )
-            }, actions = {
-                IconButton(onClick = { /*TODO*/ }) {
-                    Icon(
-                        imageVector = Icons.Default.ShoppingCart,
-                        contentDescription = "onShoppingCard"
-                    )
-                }
-            })
+            }
+
         }) {
+        it
         LazyColumn(modifier = Modifier.padding(horizontal = 10.dp)) {
             item {
 
-                Spacer(modifier = Modifier.padding(top = 15.dp))
+                Spacer(modifier = Modifier.padding(top = 80.dp))
 
                 ProductImage()
                 ProductDescription()
@@ -81,6 +107,7 @@ fun ProductScreen(productId: String) {
         }
     }
 }
+
 
 @Composable
 fun ProductComments(lazyListScope: LazyListScope) {
@@ -118,8 +145,10 @@ fun MoreComment() {
     ) {
         Column(modifier = Modifier
             .clip(CircleShape)
-            .clickable(interactionSource = MutableInteractionSource()
-                , indication = rememberRipple(color = Color.White)){
+            .clickable(
+                interactionSource = MutableInteractionSource(),
+                indication = rememberRipple(color = Color.White)
+            ) {
 
             }
             .padding(10.dp)) {
@@ -254,7 +283,7 @@ fun ProductDescription() {
 
         Text(
             text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ornare mi porta lacus tempor elementum. Vestibulum hendrerit ipsum ac enim rutrum, quis sagittis diam scelerisque. Aenean consequat, enim nec convallis volutpat, magna arcu dapibus risus, non aliquam nulla mi a augue. Maecenas in enim pharetra, placerat orci ac, volutpat urna. Quisque luctus facilisis urna auctor bibendum. Ut ac neque tortor. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Suspendisse lobortis fermentum dapibus. Ut tempus sodales libero ut pellentesque. Aliquam pellentesque accumsan scelerisque. Duis consectetur tortor augue, at porttitor odio elementum interdum.",
-            textAlign = TextAlign.Justify
+            textAlign = TextAlign.Justify,
         )
 
         TextButton(onClick = { /*TODO*/ }, modifier = Modifier.padding(10.dp)) {
