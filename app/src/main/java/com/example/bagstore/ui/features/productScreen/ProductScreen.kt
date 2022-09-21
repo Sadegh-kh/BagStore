@@ -22,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
@@ -32,6 +33,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
 import com.example.bagstore.R
+import com.example.bagstore.ui.theme.BackgroundMain
 import com.example.bagstore.ui.theme.Blue
 import com.example.bagstore.ui.theme.Shapes
 import com.example.bagstore.ui.theme.tagShape
@@ -86,6 +88,46 @@ fun ProductScreen(productId: String) {
                 )
             }
 
+        },
+
+        bottomBar = {
+            Column {
+
+                Spacer(
+                    modifier = Modifier
+                        .background(
+                            brush = Brush.verticalGradient(
+                                colors = listOf(
+                                    Color.Transparent,
+                                    Color.Black.copy(0.1f),
+                                )
+                            )
+                        )
+                        .fillMaxWidth()
+                        .height(3.dp)
+
+                )
+
+                Row(
+                    modifier = Modifier
+                        .background(BackgroundMain)
+                        .padding(10.dp)
+                        .fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "Add To Card",
+                        modifier = Modifier
+                            .clip(Shapes.medium)
+                            .background(Blue)
+                            .padding(10.dp),
+                        color = Color.White
+                    )
+                    Spacer(modifier = Modifier.weight(1f))
+
+                    Text(text = "100 Tomans", modifier = Modifier.padding(10.dp))
+                }
+            }
         }) {
         it
         LazyColumn(modifier = Modifier.padding(horizontal = 10.dp)) {
@@ -102,15 +144,15 @@ fun ProductScreen(productId: String) {
 
                 Divider()
 
-                ProductComments(this@LazyColumn)
+                productComments(this@LazyColumn)
             }
         }
     }
 }
 
 
-@Composable
-fun ProductComments(lazyListScope: LazyListScope) {
+
+fun productComments(lazyListScope: LazyListScope) {
     lazyListScope.item {
         Row(
             modifier = Modifier
@@ -134,7 +176,9 @@ fun ProductComments(lazyListScope: LazyListScope) {
 
     lazyListScope.item {
         MoreComment()
+        Spacer(modifier = Modifier.padding(bottom = 60.dp))
     }
+
 }
 
 @Composable
