@@ -56,7 +56,7 @@ fun ProductScreen(productId: String) {
 
         topBar = {
             Surface(elevation = 5.dp) {
-                TopAppBar(
+                CenterAlignedTopAppBar(
                     navigationIcon = {
                         IconButton(onClick = { /*TODO*/ }) {
                             Icon(
@@ -68,10 +68,6 @@ fun ProductScreen(productId: String) {
                     title = {
                         Text(
                             text = "Details",
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(end = 20.dp),
-                            textAlign = TextAlign.Center,
                             fontSize = 20.sp,
                         )
                     },
