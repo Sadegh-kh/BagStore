@@ -37,6 +37,7 @@ import com.example.bagstore.ui.theme.BackgroundMain
 import com.example.bagstore.ui.theme.Blue
 import com.example.bagstore.ui.theme.Shapes
 import com.example.bagstore.ui.theme.tagShape
+import androidx.compose.material3.BottomAppBar as BottomAppBar
 
 @ExperimentalMaterial3Api
 @Composable
@@ -87,7 +88,24 @@ fun ProductScreen(productId: String) {
         },
 
         bottomBar = {
-            Column {
+            BottomAppBar(
+                elevation = 20.dp, backgroundColor = BackgroundMain
+                        , contentPadding = PaddingValues(10.dp)
+            ) {
+                    Text(
+                        text = "Add To Card",
+                        modifier = Modifier
+                            .clip(Shapes.medium)
+                            .background(Blue)
+                            .padding(10.dp),
+                        color = Color.White
+                    )
+
+                Spacer(modifier = Modifier.weight(1f))
+
+                Text(text = "100 Tomans")
+            }
+            /*Column {
 
                 Spacer(
                     modifier = Modifier
@@ -111,19 +129,9 @@ fun ProductScreen(productId: String) {
                         .fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(
-                        text = "Add To Card",
-                        modifier = Modifier
-                            .clip(Shapes.medium)
-                            .background(Blue)
-                            .padding(10.dp),
-                        color = Color.White
-                    )
-                    Spacer(modifier = Modifier.weight(1f))
 
-                    Text(text = "100 Tomans", modifier = Modifier.padding(10.dp))
                 }
-            }
+            }*/
         }) {
         it
         LazyColumn(modifier = Modifier.padding(horizontal = 10.dp)) {
@@ -145,7 +153,6 @@ fun ProductScreen(productId: String) {
         }
     }
 }
-
 
 
 fun productComments(lazyListScope: LazyListScope) {
