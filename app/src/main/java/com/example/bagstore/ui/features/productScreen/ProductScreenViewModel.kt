@@ -9,11 +9,15 @@ import com.example.bagstore.model.repository.product.ProductRepository
 import com.example.bagstore.util.coroutineExceptionHandler
 import kotlinx.coroutines.launch
 
-class ProductScreenViewModel(private val productRepository: ProductRepository) : ViewModel() {
-    val productState = mutableStateOf<Product>(null!!)
-    fun getProductById(productId: String) {
+class ProductScreenViewModel(productId: String,private val productRepository: ProductRepository) : ViewModel() {
+    val productState = mutableStateOf<Product>(Product("","","","","","","","",""))
+    init {
+        getProductById(productId)
+    }
+    private fun getProductById(productId: String) {
         viewModelScope.launch(context = coroutineExceptionHandler) {
             productState.value=productRepository.getProductById(productId)
         }
     }
+
 }

@@ -17,9 +17,7 @@ import com.example.bagstore.ui.features.productScreen.ProductScreenViewModel
 import com.example.bagstore.ui.features.signInScreen.SignInViewModel
 import com.example.bagstore.ui.features.singUpScreen.SignUpViewModel
 import com.example.bagstore.util.BASE_URL
-import com.example.bagstore.util.NetworkChecker
 import okhttp3.OkHttpClient
-import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -94,5 +92,6 @@ val myModules= module {
     viewModel { (isNetConnected:Boolean)-> MainScreenViewModel(get(),isNetConnected) }
     viewModel { (categoryName:String)->CategoryScreenViewModel(categoryName,get()) }
 
-    viewModel { ProductScreenViewModel(get()) }
+    viewModel { (productId:String)->ProductScreenViewModel(productId,get()) }
+
 }
