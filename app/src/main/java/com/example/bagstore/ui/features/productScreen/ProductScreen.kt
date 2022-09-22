@@ -32,6 +32,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import coil.compose.AsyncImage
 import com.example.bagstore.R
 import com.example.bagstore.model.data.Product
@@ -40,6 +42,7 @@ import com.example.bagstore.util.MyScreens
 import dev.burnoo.cokoin.navigation.getNavController
 import dev.burnoo.cokoin.viewmodel.getViewModel
 import org.koin.core.parameter.parametersOf
+import androidx.compose.material.OutlinedTextField
 
 @ExperimentalMaterial3Api
 @Composable
@@ -174,14 +177,58 @@ fun ProductScreen(productId: String) {
 
             Divider()
 
-            ProductComments()
+            ProductComments(viewModel)
         }
 
     }
 }
 
+@ExperimentalMaterial3Api
 @Composable
-fun ProductComments() {
+fun ProductComments(viewModel: ProductScreenViewModel) {
+
+    //add new comment dialog
+    val dialogVisibility = viewModel.dialogVisibilityState
+    if (dialogVisibility.value) {
+        Dialog(onDismissRequest = { dialogVisibility.value = false },
+            properties = DialogProperties(dismissOnClickOutside = false)) {
+            Column(
+                modifier = Modifier
+                    .clip(Shapes.small)
+                    .background(Color.White)
+                    .fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = "Write Your Comment",
+                    modifier = Modifier.padding(vertical = 15.dp),
+                    fontSize = 20.sp,
+                    style = androidx.compose.material3.MaterialTheme.typography.titleMedium
+                )
+                OutlinedTextField(value = "",
+                    onValueChange = {},
+                    modifier = Modifier
+                        .fillMaxWidth(0.9f)
+                        .padding(top = 8.dp),
+                    label = {
+                        Text(text = "Write Something")
+                    })
+                
+                Row(modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp).padding(end = 5.dp), horizontalArrangement = Arrangement.End) {
+                    TextButton(onClick = { /*TODO*/ }) {
+                        Text(text = "Cancel")
+                    }
+                    TextButton(onClick = { /*TODO*/ }) {
+                     Text(text = "Ok")
+                    }
+                    
+                }
+
+            }
+        }
+    }
+
     Row(
         modifier = Modifier
             .fillMaxWidth(),
@@ -192,7 +239,10 @@ fun ProductComments() {
         )
         Spacer(modifier = Modifier.weight(1f))
 
-        TextButton(onClick = {}, modifier = Modifier.align(Alignment.Top)) {
+        TextButton(
+            onClick = { viewModel.dialogVisibilityState.value = true },
+            modifier = Modifier.align(Alignment.Top)
+        ) {
             Text(text = "Add New Comment", fontSize = 15.sp)
         }
     }
@@ -217,7 +267,7 @@ fun MoreComment() {
                 interactionSource = MutableInteractionSource(),
                 indication = rememberRipple(color = Color.White)
             ) {
-
+                // TODO: click on more comment
             }
             .padding(10.dp)) {
             Icon(
@@ -309,7 +359,7 @@ fun ProductDetails(product: Product) {
                     contentDescription = "soldDetail"
                 )
                 Text(
-                    text = product.soldItem+" Sold",
+                    text = product.soldItem + " Sold",
                     fontSize = 12.sp,
                     modifier = Modifier.padding(start = 8.dp)
                 )
@@ -327,7 +377,7 @@ fun ProductDetails(product: Product) {
         ) {
 
             Text(
-                text = "Best Sellers",
+                text = product.tags,
                 Modifier
                     .background(Blue)
                     .padding(10.dp)

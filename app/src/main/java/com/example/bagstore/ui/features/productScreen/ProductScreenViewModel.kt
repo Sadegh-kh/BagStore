@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
 
 class ProductScreenViewModel(productId: String,private val productRepository: ProductRepository) : ViewModel() {
     val productState = mutableStateOf<Product>(Product("","","","","","","","",""))
+    val dialogVisibilityState= mutableStateOf(false)
     init {
         getProductById(productId)
     }
