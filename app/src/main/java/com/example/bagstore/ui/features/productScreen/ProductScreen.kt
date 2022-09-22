@@ -1,5 +1,6 @@
 package com.example.bagstore.ui.features.productScreen
 
+import androidx.activity.findViewTreeOnBackPressedDispatcherOwner
 import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -22,10 +23,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -33,11 +35,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
 import com.example.bagstore.R
-import com.example.bagstore.ui.theme.BackgroundMain
-import com.example.bagstore.ui.theme.Blue
-import com.example.bagstore.ui.theme.Shapes
-import com.example.bagstore.ui.theme.tagShape
-import androidx.compose.material3.BottomAppBar as BottomAppBar
+import com.example.bagstore.ui.theme.*
+import com.example.bagstore.util.MyScreens
+import dev.burnoo.cokoin.navigation.getNavController
 
 @ExperimentalMaterial3Api
 @Composable
@@ -51,60 +51,77 @@ fun ProductScreen(productId: String) {
         )
     )
 
+    val onBackPressed = LocalView.current.findViewTreeOnBackPressedDispatcherOwner()
+
+    val navController = getNavController()
+
     Scaffold(
 
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
 
         topBar = {
-            Surface(elevation = 5.dp) {
                 CenterAlignedTopAppBar(
+                    modifier = Modifier.shadow(5.dp),
                     navigationIcon = {
-                        IconButton(onClick = { /*TODO*/ }) {
+                        IconButton(onClick = { onBackPressed!!.onBackPressedDispatcher.onBackPressed() }) {
                             Icon(
                                 imageVector = Icons.Default.ArrowBack,
                                 contentDescription = "onBack"
                             )
                         }
                     },
+
                     title = {
                         Text(
                             text = "Details",
                             fontSize = 20.sp,
                         )
                     },
+
                     actions = {
-                        IconButton(onClick = { /*TODO*/ }) {
+                        IconButton(onClick = {
+                            navController.navigate(MyScreens.ShoppingCardScreen.route)
+                        }) {
                             Icon(
                                 imageVector = Icons.Default.ShoppingCart,
                                 contentDescription = "onShoppingCard"
                             )
                         }
                     },
+
                     scrollBehavior = scrollBehavior,
                     colors = topAppBarBackgroundColor
                 )
-            }
-
         },
 
         bottomBar = {
             BottomAppBar(
-                elevation = 20.dp, backgroundColor = BackgroundMain
-                        , contentPadding = PaddingValues(10.dp)
+                elevation = 20.dp,
+                backgroundColor = BackgroundMain,
+                contentPadding = PaddingValues(5.dp)
             ) {
-                    Text(
-                        text = "Add To Card",
-                        modifier = Modifier
-                            .clip(Shapes.medium)
-                            .background(Blue)
-                            .padding(10.dp),
-                        color = Color.White
-                    )
+                Text(
+                    text = "Add Product To Card",
+                    modifier = Modifier
+                        .padding(start = 5.dp)
+                        .clip(Shapes.medium)
+                        .background(Blue)
+                        .padding(10.dp),
+                    color = Color.White
+                )
 
                 Spacer(modifier = Modifier.weight(1f))
 
-                Text(text = "100 Tomans")
+                Text(
+                    text = "100 Tomans",
+                    modifier = Modifier
+                        .padding(end = 5.dp)
+                        .clip(Shapes.medium)
+                        .background(Blue.copy(alpha = 0.04f))
+                        .padding(5.dp)
+                )
             }
+
             /*Column {
 
                 Spacer(
@@ -179,7 +196,7 @@ fun productComments(lazyListScope: LazyListScope) {
 
     lazyListScope.item {
         MoreComment()
-        Spacer(modifier = Modifier.padding(bottom = 60.dp))
+        Spacer(modifier = Modifier.padding(bottom = 70.dp))
     }
 
 }
@@ -354,7 +371,9 @@ fun ProductImage() {
 }
 
 
+@ExperimentalMaterial3Api
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
+    ProductScreen(productId = "2")
 }
