@@ -13,6 +13,7 @@ import com.example.bagstore.model.repository.user.UserRepository
 import com.example.bagstore.model.repository.user.UserRepositoryImp
 import com.example.bagstore.ui.features.categoryScreen.CategoryScreenViewModel
 import com.example.bagstore.ui.features.mainScreen.MainScreenViewModel
+import com.example.bagstore.ui.features.productScreen.ProductScreenViewModel
 import com.example.bagstore.ui.features.signInScreen.SignInViewModel
 import com.example.bagstore.ui.features.singUpScreen.SignUpViewModel
 import com.example.bagstore.util.BASE_URL
@@ -92,4 +93,6 @@ val myModules= module {
     //get net condition from entry
     viewModel { (isNetConnected:Boolean)-> MainScreenViewModel(get(),isNetConnected) }
     viewModel { (categoryName:String)->CategoryScreenViewModel(categoryName,get()) }
+
+    viewModel { ProductScreenViewModel(get()) }
 }
