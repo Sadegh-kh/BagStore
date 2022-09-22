@@ -4,8 +4,6 @@ import androidx.activity.findViewTreeOnBackPressedDispatcherOwner
 import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.Card
@@ -59,8 +57,8 @@ fun ProductScreen(productId: String) {
 
     val navController = getNavController()
 
-    val viewModel= getViewModel<ProductScreenViewModel>(
-        parameters = {parametersOf(productId)}
+    val viewModel = getViewModel<ProductScreenViewModel>(
+        parameters = { parametersOf(productId) }
 
     )
 
@@ -69,38 +67,38 @@ fun ProductScreen(productId: String) {
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
 
         topBar = {
-                CenterAlignedTopAppBar(
-                    modifier = Modifier.shadow(5.dp),
-                    navigationIcon = {
-                        IconButton(onClick = { onBackPressed!!.onBackPressedDispatcher.onBackPressed() }) {
-                            Icon(
-                                imageVector = Icons.Default.ArrowBack,
-                                contentDescription = "onBack"
-                            )
-                        }
-                    },
-
-                    title = {
-                        Text(
-                            text = "Details",
-                            fontSize = 20.sp,
+            CenterAlignedTopAppBar(
+                modifier = Modifier.shadow(5.dp),
+                navigationIcon = {
+                    IconButton(onClick = { onBackPressed!!.onBackPressedDispatcher.onBackPressed() }) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = "onBack"
                         )
-                    },
+                    }
+                },
 
-                    actions = {
-                        IconButton(onClick = {
-                            navController.navigate(MyScreens.ShoppingCardScreen.route)
-                        }) {
-                            Icon(
-                                imageVector = Icons.Default.ShoppingCart,
-                                contentDescription = "onShoppingCard"
-                            )
-                        }
-                    },
+                title = {
+                    Text(
+                        text = "Details",
+                        fontSize = 20.sp,
+                    )
+                },
 
-                    scrollBehavior = scrollBehavior,
-                    colors = topAppBarBackgroundColor
-                )
+                actions = {
+                    IconButton(onClick = {
+                        navController.navigate(MyScreens.ShoppingCardScreen.route)
+                    }) {
+                        Icon(
+                            imageVector = Icons.Default.ShoppingCart,
+                            contentDescription = "onShoppingCard"
+                        )
+                    }
+                },
+
+                scrollBehavior = scrollBehavior,
+                colors = topAppBarBackgroundColor
+            )
         },
 
         bottomBar = {
@@ -160,54 +158,51 @@ fun ProductScreen(productId: String) {
             }*/
         }) {
         it
-        LazyColumn(modifier = Modifier.padding(horizontal = 10.dp)) {
-            item {
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 10.dp)
+                .verticalScroll(rememberScrollState())
+        ) {
+            Spacer(modifier = Modifier.padding(top = 80.dp))
 
-                Spacer(modifier = Modifier.padding(top = 80.dp))
+            ProductImage(viewModel.productState.value)
+            ProductDescription(viewModel.productState.value)
 
-                ProductImage(viewModel.productState.value)
-                ProductDescription(viewModel.productState.value)
+            Divider()
 
-                Divider()
+            ProductDetails(viewModel.productState.value)
 
-                ProductDetails()
+            Divider()
 
-                Divider()
-
-                productComments(this@LazyColumn)
-            }
+            ProductComments()
         }
+
     }
 }
 
+@Composable
+fun ProductComments() {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = "Comments", fontSize = 20.sp, style = MaterialTheme.typography.h6
+        )
+        Spacer(modifier = Modifier.weight(1f))
 
-fun productComments(lazyListScope: LazyListScope) {
-    lazyListScope.item {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = "Comments", fontSize = 20.sp, style = MaterialTheme.typography.h6
-            )
-            Spacer(modifier = Modifier.weight(1f))
-
-            TextButton(onClick = {}, modifier = Modifier.align(Alignment.Top)) {
-                Text(text = "Add New Comment", fontSize = 15.sp)
-            }
+        TextButton(onClick = {}, modifier = Modifier.align(Alignment.Top)) {
+            Text(text = "Add New Comment", fontSize = 15.sp)
         }
     }
 
-    lazyListScope.items(3) {
+    for (i in 0..2) {
         CommentItem()
     }
 
-    lazyListScope.item {
-        MoreComment()
-        Spacer(modifier = Modifier.padding(bottom = 70.dp))
-    }
-
+    MoreComment()
+    Spacer(modifier = Modifier.padding(bottom = 70.dp))
 }
 
 @Composable
@@ -270,7 +265,7 @@ fun CommentItem() {
 }
 
 @Composable
-fun ProductDetails() {
+fun ProductDetails(product: Product) {
     Row(
         modifier = Modifier
             .padding(10.dp)
@@ -284,6 +279,7 @@ fun ProductDetails() {
                     painter = painterResource(id = R.drawable.ic_details_comment),
                     contentDescription = "commentDetail"
                 )
+                // TODO: this initial when init part of comment
                 Text(
                     text = "6 Comments",
                     fontSize = 12.sp,
@@ -299,7 +295,7 @@ fun ProductDetails() {
                     contentDescription = "materialDetail"
                 )
                 Text(
-                    text = "Leather",
+                    text = product.material,
                     fontSize = 12.sp,
                     modifier = Modifier.padding(start = 8.dp)
                 )
@@ -313,7 +309,7 @@ fun ProductDetails() {
                     contentDescription = "soldDetail"
                 )
                 Text(
-                    text = "50 Sold",
+                    text = product.soldItem+" Sold",
                     fontSize = 12.sp,
                     modifier = Modifier.padding(start = 8.dp)
                 )
@@ -355,25 +351,27 @@ fun ProductDescription(product: Product) {
         Spacer(modifier = Modifier.padding(top = 10.dp))
 
         Text(
-            text=product.detailText,
+            text = product.detailText,
             textAlign = TextAlign.Justify,
             lineHeight = 25.sp
         )
 
-        TextButton(onClick = { /*TODO*/ }, modifier = Modifier.padding(10.dp)) {
-            Text(text = product.category)
+        TextButton(onClick = { /*TODO*/ }, modifier = Modifier.padding(5.dp)) {
+            Text(text = "#" + product.category)
         }
     }
 }
 
 @Composable
 fun ProductImage(product: Product) {
-    AsyncImage(model = product.imgUrl ,contentDescription = "ProductImage",
+    AsyncImage(
+        model = product.imgUrl, contentDescription = "ProductImage",
         modifier = Modifier
             .fillMaxWidth()
             .height(250.dp)
             .clip(Shapes.medium),
-        contentScale = ContentScale.Crop)
+        contentScale = ContentScale.Crop
+    )
 }
 
 
