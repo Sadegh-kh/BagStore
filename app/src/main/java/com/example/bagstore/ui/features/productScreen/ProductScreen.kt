@@ -34,10 +34,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
+import coil.compose.AsyncImage
 import com.example.bagstore.R
+import com.example.bagstore.model.data.Product
 import com.example.bagstore.ui.theme.*
 import com.example.bagstore.util.MyScreens
 import dev.burnoo.cokoin.navigation.getNavController
+import dev.burnoo.cokoin.viewmodel.getViewModel
+import org.koin.core.parameter.parametersOf
 
 @ExperimentalMaterial3Api
 @Composable
@@ -54,6 +58,11 @@ fun ProductScreen(productId: String) {
     val onBackPressed = LocalView.current.findViewTreeOnBackPressedDispatcherOwner()
 
     val navController = getNavController()
+
+    val viewModel= getViewModel<ProductScreenViewModel>(
+        parameters = {parametersOf(productId)}
+
+    )
 
     Scaffold(
 
@@ -156,8 +165,8 @@ fun ProductScreen(productId: String) {
 
                 Spacer(modifier = Modifier.padding(top = 80.dp))
 
-                ProductImage()
-                ProductDescription()
+                ProductImage(viewModel.productState.value)
+                ProductDescription(viewModel.productState.value)
 
                 Divider()
 
@@ -336,38 +345,35 @@ fun ProductDetails() {
 }
 
 @Composable
-fun ProductDescription() {
+fun ProductDescription(product: Product) {
     Column(
         modifier = Modifier
             .padding(top = 10.dp)
     ) {
-        Text(text = "Mahi", style = MaterialTheme.typography.h6, fontSize = 20.sp)
+        Text(text = product.name, style = MaterialTheme.typography.h6, fontSize = 20.sp)
 
         Spacer(modifier = Modifier.padding(top = 10.dp))
 
         Text(
-            text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ornare mi porta lacus tempor elementum. Vestibulum hendrerit ipsum ac enim rutrum, quis sagittis diam scelerisque. Aenean consequat, enim nec convallis volutpat, magna arcu dapibus risus, non aliquam nulla mi a augue. Maecenas in enim pharetra, placerat orci ac, volutpat urna. Quisque luctus facilisis urna auctor bibendum. Ut ac neque tortor. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Suspendisse lobortis fermentum dapibus. Ut tempus sodales libero ut pellentesque. Aliquam pellentesque accumsan scelerisque. Duis consectetur tortor augue, at porttitor odio elementum interdum.",
+            text=product.detailText,
             textAlign = TextAlign.Justify,
             lineHeight = 25.sp
         )
 
         TextButton(onClick = { /*TODO*/ }, modifier = Modifier.padding(10.dp)) {
-            Text(text = "#Clutch")
+            Text(text = product.category)
         }
     }
 }
 
 @Composable
-fun ProductImage() {
-    Image(
-        painter = painterResource(id = R.drawable.img_intro),
-        contentDescription = "ProductImage",
+fun ProductImage(product: Product) {
+    AsyncImage(model = product.imgUrl ,contentDescription = "ProductImage",
         modifier = Modifier
             .fillMaxWidth()
             .height(250.dp)
             .clip(Shapes.medium),
-        contentScale = ContentScale.Crop
-    )
+        contentScale = ContentScale.Crop)
 }
 
 
