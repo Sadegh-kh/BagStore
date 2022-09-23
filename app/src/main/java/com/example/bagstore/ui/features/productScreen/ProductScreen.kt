@@ -140,33 +140,6 @@ fun ProductScreen(productId: String) {
                 )
             }
 
-            /*Column {
-
-                Spacer(
-                    modifier = Modifier
-                        .background(
-                            brush = Brush.verticalGradient(
-                                colors = listOf(
-                                    Color.Transparent,
-                                    Color.Black.copy(0.1f),
-                                )
-                            )
-                        )
-                        .fillMaxWidth()
-                        .height(3.dp)
-
-                )
-
-                Row(
-                    modifier = Modifier
-                        .background(BackgroundMain)
-                        .padding(10.dp)
-                        .fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-
-                }
-            }*/
         }) {
         it
         Column(
@@ -197,14 +170,19 @@ fun ProductComments(viewModel: ProductScreenViewModel) {
 
     //add new comment dialog
     val dialogVisibility = viewModel.dialogVisibilityState
+    //dialog
     if (dialogVisibility.value) {
-        Dialog(onDismissRequest = { dialogVisibility.value = false },
-            properties = DialogProperties(dismissOnClickOutside = false)) {
+        Dialog(
+            onDismissRequest = { dialogVisibility.value = false },
+            properties = DialogProperties(dismissOnClickOutside = false)
+        ) {
+
             Column(
                 modifier = Modifier
                     .clip(Shapes.small)
                     .background(Color.White)
-                    .fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally
+                    .fillMaxHeight(0.55f),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
                     text = "Write Your Comment",
@@ -212,25 +190,28 @@ fun ProductComments(viewModel: ProductScreenViewModel) {
                     fontSize = 20.sp,
                     style = androidx.compose.material3.MaterialTheme.typography.titleMedium
                 )
-                OutlinedTextField(value = "",
-                    onValueChange = {},
+                OutlinedTextField(value = viewModel.textFieldState.value,
+                    onValueChange = { viewModel.textFieldState.value = it },
                     modifier = Modifier
                         .fillMaxWidth(0.9f)
                         .padding(top = 8.dp),
                     label = {
                         Text(text = "Write Something")
                     })
-                
-                Row(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp).padding(end = 5.dp), horizontalArrangement = Arrangement.End) {
-                    TextButton(onClick = { /*TODO*/ }) {
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp)
+                        .padding(end = 5.dp), horizontalArrangement = Arrangement.End
+                ) {
+                    TextButton(onClick = { dialogVisibility.value = false }) {
                         Text(text = "Cancel")
                     }
                     TextButton(onClick = { /*TODO*/ }) {
-                     Text(text = "Ok")
+                        Text(text = "Ok")
                     }
-                    
+
                 }
 
             }
