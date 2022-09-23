@@ -17,7 +17,6 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -43,6 +42,8 @@ import dev.burnoo.cokoin.navigation.getNavController
 import dev.burnoo.cokoin.viewmodel.getViewModel
 import org.koin.core.parameter.parametersOf
 import androidx.compose.material.OutlinedTextField
+import androidx.compose.runtime.*
+import androidx.navigation.NavHostController
 
 @ExperimentalMaterial3Api
 @Composable
@@ -73,10 +74,17 @@ fun ProductScreen(productId: String) {
             CenterAlignedTopAppBar(
                 modifier = Modifier.shadow(5.dp),
                 navigationIcon = {
-                    IconButton(onClick = { onBackPressed!!.onBackPressedDispatcher.onBackPressed() }) {
+                    IconButton(onClick = {
+                        navController.navigate(MyScreens.MainScreen.route){
+                            popUpTo(MyScreens.MainScreen.route){
+                                inclusive=true
+                            }
+                        }
+                        /*onBackPressed!!.onBackPressedDispatcher.onBackPressed()*/
+                    }) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
-                            contentDescription = "onBack"
+                            contentDescription = "onBackToMainScreen"
                         )
                     }
                 },
@@ -229,6 +237,7 @@ fun ProductComments(viewModel: ProductScreenViewModel) {
         }
     }
 
+
     Row(
         modifier = Modifier
             .fillMaxWidth(),
@@ -246,7 +255,7 @@ fun ProductComments(viewModel: ProductScreenViewModel) {
             Text(text = "Add New Comment", fontSize = 15.sp)
         }
     }
-
+    //3 comments of first comments
     for (i in 0..2) {
         CommentItem()
     }
@@ -329,7 +338,7 @@ fun ProductDetails(product: Product) {
                     painter = painterResource(id = R.drawable.ic_details_comment),
                     contentDescription = "commentDetail"
                 )
-                // TODO: this initial when init part of comment
+                // TODO: this must initial when init part of comment
                 Text(
                     text = "6 Comments",
                     fontSize = 12.sp,
