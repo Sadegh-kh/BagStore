@@ -177,7 +177,7 @@ fun ProductScreen(productId: String) {
             Spacer(modifier = Modifier.padding(top = 80.dp))
 
             ProductImage(viewModel.productState.value)
-            ProductDescription(viewModel.productState.value)
+            ProductDescription(viewModel.productState.value,navController)
 
             Divider()
 
@@ -400,7 +400,7 @@ fun ProductDetails(product: Product) {
 }
 
 @Composable
-fun ProductDescription(product: Product) {
+fun ProductDescription(product: Product, navController: NavHostController) {
     Column(
         modifier = Modifier
             .padding(top = 10.dp)
@@ -415,7 +415,7 @@ fun ProductDescription(product: Product) {
             lineHeight = 25.sp
         )
 
-        TextButton(onClick = { /*TODO*/ }, modifier = Modifier.padding(5.dp)) {
+        TextButton(onClick = { navController.navigate(MyScreens.CategoryScreen.route+"/${product.category}") }, modifier = Modifier.padding(5.dp)) {
             Text(text = "#" + product.category)
         }
     }
