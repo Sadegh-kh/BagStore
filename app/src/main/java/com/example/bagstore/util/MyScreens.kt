@@ -10,4 +10,5 @@ sealed class MyScreens(val route:String){
     object ShoppingCardScreen:MyScreens("shoppingCardScreen")
     object CategoryScreen:MyScreens("categoryScreen")
     object ProductScreen:MyScreens("productScreen")
+    object CommentScreen:MyScreens("commentScreen")
 }

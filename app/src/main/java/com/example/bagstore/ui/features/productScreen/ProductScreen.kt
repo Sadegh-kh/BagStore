@@ -158,7 +158,7 @@ fun ProductScreen(productId: String) {
 
             Divider()
 
-            ProductComments(viewModel)
+            ProductComments(viewModel,navController)
         }
 
     }
@@ -166,7 +166,7 @@ fun ProductScreen(productId: String) {
 
 @ExperimentalMaterial3Api
 @Composable
-fun ProductComments(viewModel: ProductScreenViewModel) {
+fun ProductComments(viewModel: ProductScreenViewModel,navController: NavHostController) {
 
     //add new comment dialog
     val dialogVisibility = viewModel.dialogVisibilityState
@@ -241,12 +241,12 @@ fun ProductComments(viewModel: ProductScreenViewModel) {
         CommentItem()
     }
 
-    MoreComment()
+    MoreComment(viewModel.productState.value,navController)
     Spacer(modifier = Modifier.padding(bottom = 70.dp))
 }
 
 @Composable
-fun MoreComment() {
+fun MoreComment(product: Product,navController: NavHostController) {
     Box(
         modifier = Modifier
             .fillMaxWidth(), contentAlignment = Alignment.Center
@@ -257,7 +257,7 @@ fun MoreComment() {
                 interactionSource = MutableInteractionSource(),
                 indication = rememberRipple(color = Color.White)
             ) {
-                // TODO: click on more comment
+                navController.navigate(MyScreens.CommentScreen.route+"/${product.productId}")
             }
             .padding(10.dp)) {
             Icon(

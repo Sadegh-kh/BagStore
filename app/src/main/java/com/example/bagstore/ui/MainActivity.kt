@@ -18,6 +18,7 @@ import com.example.bagstore.model.repository.TokenInMemory
 import com.example.bagstore.model.repository.user.UserRepository
 import com.example.bagstore.ui.features.IntroScreen
 import com.example.bagstore.ui.features.categoryScreen.CategoryScreen
+import com.example.bagstore.ui.features.commentScreen.CommentScreen
 import com.example.bagstore.ui.features.mainScreen.MainScreen
 import com.example.bagstore.ui.features.productScreen.ProductScreen
 import com.example.bagstore.ui.features.profileScreen.ProfileScreen
@@ -115,6 +116,14 @@ fun BagStoreUi() {
             })
         ) {
             ProductScreen(productId = it.arguments!!.getString(KEY_PRODUCT_ARG, ""))
+        }
+
+        composable(route = MyScreens.CommentScreen.route+"/{$KEY_PRODUCT_ARG}",
+        arguments = listOf(navArgument(KEY_PRODUCT_ARG){
+            type=NavType.StringType
+        })
+        ){
+            CommentScreen(it.arguments!!.getString(KEY_PRODUCT_ARG,""))
         }
 
     }
