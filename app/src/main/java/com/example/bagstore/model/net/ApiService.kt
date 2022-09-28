@@ -1,9 +1,6 @@
 package com.example.bagstore.model.net
 
-import com.example.bagstore.model.data.AdvertisementsResponse
-import com.example.bagstore.model.data.LoginResponse
-import com.example.bagstore.model.data.Product
-import com.example.bagstore.model.data.ProductResponse
+import com.example.bagstore.model.data.*
 import com.example.bagstore.model.repository.TokenInMemory
 import com.google.gson.JsonObject
 import retrofit2.Call
@@ -29,6 +26,9 @@ interface ApiService {
 
     @GET("getSliderPics")
     suspend fun getAllAdvertisements():AdvertisementsResponse
+
+    @POST("getComments")
+    suspend fun getAllComment(@Body productId:JsonObject):CommentResponse
 
 
 }
