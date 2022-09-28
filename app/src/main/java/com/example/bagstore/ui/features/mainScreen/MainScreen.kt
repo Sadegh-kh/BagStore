@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.example.bagstore.ui.features.mainScreen
 
 import android.widget.Toast
@@ -11,6 +13,9 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -251,12 +256,10 @@ fun CategoryItem(categoryItem: Pair<String, Int>, onCategoryClicked: (String) ->
 @Composable
 fun TopToolBar(onClickShoppingCart: () -> Unit, onProfileClicked: () -> Unit) {
     TopAppBar(
-        elevation = 0.dp,
-        backgroundColor = BackgroundMain,
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight(Alignment.Top),
-        title = { Text(text = "Bag Store") },
+        title = { Text(text = "Bag Store", fontSize = 20.sp, style = MaterialTheme.typography.h6) },
         actions = {
             IconButton(onClick = {
                 onClickShoppingCart.invoke()
