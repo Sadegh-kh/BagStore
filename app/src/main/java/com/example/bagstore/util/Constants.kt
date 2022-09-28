@@ -1,6 +1,7 @@
 package com.example.bagstore.util
 
 import com.example.bagstore.R
+import com.example.bagstore.model.data.Product
 
 const val BASE_URL="https://dunijet.ir/Projects/DuniBazaar/"
 
@@ -30,3 +31,5 @@ val TAGS= listOf(
     "Most Visited",
     "Highest Quality"
 )
+
+val ProductEmpty= Product("","","","","","","","","")

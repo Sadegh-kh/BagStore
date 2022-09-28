@@ -5,6 +5,8 @@ import android.content.SharedPreferences
 import androidx.room.Room
 import com.example.bagstore.model.net.ApiService
 import com.example.bagstore.model.repository.TokenInMemory
+import com.example.bagstore.model.repository.comment.CommentRepository
+import com.example.bagstore.model.repository.comment.CommentRepositoryImp
 import com.example.bagstore.model.repository.local.MyDatabase
 import com.example.bagstore.model.repository.local.ProductDao
 import com.example.bagstore.model.repository.product.ProductRepository
@@ -84,6 +86,11 @@ val myModules= module {
         ProductRepositoryImp(get(),get())
     }
 
+    //comment repo
+    single<CommentRepository> {
+        CommentRepositoryImp(get())
+    }
+
     //view models
     viewModel { SignUpViewModel(get()) }
     viewModel { SignInViewModel(get()) }
@@ -92,6 +99,6 @@ val myModules= module {
     viewModel { (isNetConnected:Boolean)-> MainScreenViewModel(get(),isNetConnected) }
     viewModel { (categoryName:String)->CategoryScreenViewModel(categoryName,get()) }
 
-    viewModel { (productId:String)->ProductScreenViewModel(productId,get()) }
+    viewModel { (productId:String)->ProductScreenViewModel(productId,get(),get()) }
 
 }
