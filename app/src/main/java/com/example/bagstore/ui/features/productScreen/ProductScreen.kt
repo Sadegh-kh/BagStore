@@ -1,5 +1,6 @@
 package com.example.bagstore.ui.features.productScreen
 
+import android.util.Log
 import androidx.activity.findViewTreeOnBackPressedDispatcherOwner
 import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -44,6 +45,7 @@ import org.koin.core.parameter.parametersOf
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.runtime.*
 import androidx.navigation.NavHostController
+import com.example.bagstore.model.data.Comment
 
 @ExperimentalMaterial3Api
 @Composable
@@ -154,7 +156,7 @@ fun ProductScreen(productId: String) {
 
             Divider()
 
-            ProductDetails(viewModel.productState.value)
+            ProductDetails(viewModel.productState.value,viewModel.commentListState.value)
 
             Divider()
 
@@ -218,6 +220,7 @@ fun ProductComments(viewModel: ProductScreenViewModel,navController: NavHostCont
         }
     }
 
+    val commentList=viewModel.commentListState.value
 
     Row(
         modifier = Modifier
@@ -237,11 +240,19 @@ fun ProductComments(viewModel: ProductScreenViewModel,navController: NavHostCont
         }
     }
     //3 comments of first comments
-    for (i in 0..2) {
-        CommentItem()
+    if (commentList.isEmpty()){
+        Log.v("empty","empty comment list")
+    }else if(commentList.size<3){
+        for (i in 0 until 3){
+            CommentItem(comment = commentList[i])
+        }
+    }else if (commentList.size>3){
+        for (i in 0 until 3){
+            CommentItem(comment = commentList[i])
+        }
+        MoreComment(product = viewModel.productState.value, navController = navController)
     }
 
-    MoreComment(viewModel.productState.value,navController)
     Spacer(modifier = Modifier.padding(bottom = 70.dp))
 }
 
@@ -257,7 +268,7 @@ fun MoreComment(product: Product,navController: NavHostController) {
                 interactionSource = MutableInteractionSource(),
                 indication = rememberRipple(color = Color.White)
             ) {
-                navController.navigate(MyScreens.CommentScreen.route+"/${product.productId}")
+                navController.navigate(MyScreens.CommentScreen.route + "/${product.productId}")
             }
             .padding(10.dp)) {
             Icon(
@@ -274,7 +285,7 @@ fun MoreComment(product: Product,navController: NavHostController) {
 }
 
 @Composable
-fun CommentItem() {
+fun CommentItem(comment:Comment) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -287,7 +298,7 @@ fun CommentItem() {
     ) {
         Column(modifier = Modifier.padding(10.dp)) {
             Text(
-                text = "SadeghKhoshbayan1@gmail.com",
+                text = comment.userEmail,
                 maxLines = 1,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.fillMaxWidth(),
@@ -295,7 +306,7 @@ fun CommentItem() {
             )
 
             Text(
-                text = "Alie Bud!!     sa",
+                text = comment.text,
                 textAlign = TextAlign.Justify,
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.padding(top = 5.dp)
@@ -305,7 +316,7 @@ fun CommentItem() {
 }
 
 @Composable
-fun ProductDetails(product: Product) {
+fun ProductDetails(product: Product, commentList: List<Comment>) {
     Row(
         modifier = Modifier
             .padding(10.dp)
@@ -319,9 +330,8 @@ fun ProductDetails(product: Product) {
                     painter = painterResource(id = R.drawable.ic_details_comment),
                     contentDescription = "commentDetail"
                 )
-                // TODO: this must initial when init part of comment
                 Text(
-                    text = "6 Comments",
+                    text = commentList.size.toString()+" Comments",
                     fontSize = 12.sp,
                     modifier = Modifier.padding(start = 8.dp)
                 )
