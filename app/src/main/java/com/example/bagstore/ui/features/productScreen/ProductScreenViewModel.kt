@@ -1,6 +1,5 @@
 package com.example.bagstore.ui.features.productScreen
 
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,6 +9,7 @@ import com.example.bagstore.model.repository.comment.CommentRepository
 import com.example.bagstore.model.repository.product.ProductRepository
 import com.example.bagstore.util.ProductEmpty
 import com.example.bagstore.util.coroutineExceptionHandler
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 class ProductScreenViewModel(
@@ -18,25 +18,25 @@ class ProductScreenViewModel(
     private val commentRepository: CommentRepository
 ) : ViewModel() {
     val productState = mutableStateOf<Product>(ProductEmpty)
-    val listOfCommentState = mutableStateOf<List<Comment>>(listOf())
+    val commentListState = mutableStateOf<List<Comment>>(listOf())
     val dialogVisibilityState = mutableStateOf(false)
     val textFieldState = mutableStateOf("")
 
     init {
-        getProductById(productId)
-        getAllComment(productId)
+        getProductData(productId)
     }
 
-    private fun getProductById(productId: String) {
+    private fun getProductData(productId: String) {
         viewModelScope.launch(context = coroutineExceptionHandler) {
-            productState.value = productRepository.getProductById(productId)
+            val product = async { productRepository.getProductById(productId) }
+            val comments = async{ commentRepository.getAllComment(productId) }
+            loadData(product.await(),comments.await())
         }
     }
 
-    private fun getAllComment(productId: String) {
-        viewModelScope.launch(context = coroutineExceptionHandler) {
-            listOfCommentState.value = commentRepository.getAllComment(productId)
-        }
+    private fun loadData(product: Product, commentList: List<Comment>) {
+        productState.value=product
+        commentListState.value=commentList
     }
 
 }
