@@ -46,6 +46,7 @@ import androidx.compose.material.OutlinedTextField
 import androidx.compose.runtime.*
 import androidx.navigation.NavHostController
 import com.example.bagstore.model.data.Comment
+import okhttp3.internal.indexOfFirstNonAsciiWhitespace
 
 @ExperimentalMaterial3Api
 @Composable
@@ -77,9 +78,9 @@ fun ProductScreen(productId: String) {
                 modifier = Modifier.shadow(5.dp),
                 navigationIcon = {
                     IconButton(onClick = {
-                        navController.navigate(MyScreens.MainScreen.route){
-                            popUpTo(MyScreens.MainScreen.route){
-                                inclusive=true
+                        navController.navigate(MyScreens.MainScreen.route) {
+                            popUpTo(MyScreens.MainScreen.route) {
+                                inclusive = true
                             }
                         }
                         /*onBackPressed!!.onBackPressedDispatcher.onBackPressed()*/
@@ -152,15 +153,15 @@ fun ProductScreen(productId: String) {
             Spacer(modifier = Modifier.padding(top = 80.dp))
 
             ProductImage(viewModel.productState.value)
-            ProductDescription(viewModel.productState.value,navController)
+            ProductDescription(viewModel.productState.value, navController)
 
             Divider()
 
-            ProductDetails(viewModel.productState.value,viewModel.commentListState.value)
+            ProductDetails(viewModel.productState.value, viewModel.commentListState.value)
 
             Divider()
 
-            ProductComments(viewModel,navController)
+            ProductComments(viewModel, navController)
         }
 
     }
@@ -168,7 +169,7 @@ fun ProductScreen(productId: String) {
 
 @ExperimentalMaterial3Api
 @Composable
-fun ProductComments(viewModel: ProductScreenViewModel,navController: NavHostController) {
+fun ProductComments(viewModel: ProductScreenViewModel, navController: NavHostController) {
 
     //add new comment dialog
     val dialogVisibility = viewModel.dialogVisibilityState
@@ -220,7 +221,7 @@ fun ProductComments(viewModel: ProductScreenViewModel,navController: NavHostCont
         }
     }
 
-    val commentList=viewModel.commentListState.value
+    val commentList = viewModel.commentListState.value
 
     Row(
         modifier = Modifier
@@ -240,14 +241,14 @@ fun ProductComments(viewModel: ProductScreenViewModel,navController: NavHostCont
         }
     }
     //3 comments of first comments
-    if (commentList.isEmpty()){
-        Log.v("empty","empty comment list")
-    }else if(commentList.size<3){
-        for (i in 0 until 3){
-            CommentItem(comment = commentList[i])
+    if (commentList.isEmpty()) {
+        Log.v("empty", "empty comment list")
+    } else if (commentList.size <= 3) {
+        for (element in commentList) {
+            CommentItem(comment = element)
         }
-    }else if (commentList.size>3){
-        for (i in 0 until 3){
+    } else if (commentList.size > 3) {
+        for (i in 0 until 3) {
             CommentItem(comment = commentList[i])
         }
         MoreComment(product = viewModel.productState.value, navController = navController)
@@ -257,7 +258,7 @@ fun ProductComments(viewModel: ProductScreenViewModel,navController: NavHostCont
 }
 
 @Composable
-fun MoreComment(product: Product,navController: NavHostController) {
+fun MoreComment(product: Product, navController: NavHostController) {
     Box(
         modifier = Modifier
             .fillMaxWidth(), contentAlignment = Alignment.Center
@@ -285,7 +286,7 @@ fun MoreComment(product: Product,navController: NavHostController) {
 }
 
 @Composable
-fun CommentItem(comment:Comment) {
+fun CommentItem(comment: Comment) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -331,7 +332,7 @@ fun ProductDetails(product: Product, commentList: List<Comment>) {
                     contentDescription = "commentDetail"
                 )
                 Text(
-                    text = commentList.size.toString()+" Comments",
+                    text = commentList.size.toString() + " Comments",
                     fontSize = 12.sp,
                     modifier = Modifier.padding(start = 8.dp)
                 )
@@ -406,7 +407,10 @@ fun ProductDescription(product: Product, navController: NavHostController) {
             lineHeight = 25.sp
         )
 
-        TextButton(onClick = { navController.navigate(MyScreens.CategoryScreen.route+"/${product.category}") }, modifier = Modifier.padding(5.dp)) {
+        TextButton(
+            onClick = { navController.navigate(MyScreens.CategoryScreen.route + "/${product.category}") },
+            modifier = Modifier.padding(5.dp)
+        ) {
             Text(text = "#" + product.category)
         }
     }

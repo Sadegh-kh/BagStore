@@ -136,7 +136,7 @@ fun CardViewSingUp() {
         ) {
 
             Text(
-                text = "Sign Up",
+                text = "Sign In",
                 color = Blue,
                 fontSize = 30.sp,
                 fontWeight = FontWeight.Bold,
