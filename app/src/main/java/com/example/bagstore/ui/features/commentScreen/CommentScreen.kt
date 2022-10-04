@@ -21,6 +21,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.bagstore.model.data.Comment
 import com.example.bagstore.ui.features.productScreen.CommentItem
+import dev.burnoo.cokoin.viewmodel.getViewModel
+import org.koin.core.parameter.parametersOf
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @ExperimentalMaterial3Api
@@ -54,22 +56,25 @@ fun CommentScreen(productId: String) {
 
             )
         }) {
-
-        LazyColumn(modifier = Modifier.padding(horizontal = 10.dp)){
+        val viewModel = getViewModel<CommentScreenViewModel>(
+            parameters = { parametersOf(productId) }
+        )
+        val commentList = viewModel.commentListState.value
+        LazyColumn(modifier = Modifier.padding(horizontal = 10.dp)) {
             item {
                 Spacer(modifier = Modifier.padding(top = 80.dp))
             }
-            items(10){
-                CommentItem(comment = Comment("2","Very Good","SadeghKHoshbaya@gmail.com"))
+            items(commentList.size) {
+                CommentItem(comment = commentList[it])
             }
+
+
         }
-
-
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Preview
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Preview() {
     CommentScreen("2")

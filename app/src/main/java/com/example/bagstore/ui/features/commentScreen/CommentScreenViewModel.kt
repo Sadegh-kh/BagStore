@@ -1,6 +1,5 @@
 package com.example.bagstore.ui.features.commentScreen
 
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
