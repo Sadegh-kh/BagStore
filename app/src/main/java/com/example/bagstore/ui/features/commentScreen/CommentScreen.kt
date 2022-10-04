@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.bagstore.model.data.Comment
 import com.example.bagstore.ui.features.productScreen.CommentItem
+import dev.burnoo.cokoin.navigation.getNavController
 import dev.burnoo.cokoin.viewmodel.getViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -29,6 +30,7 @@ import org.koin.core.parameter.parametersOf
 @Composable
 fun CommentScreen(productId: String) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+    val navController= getNavController()
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
@@ -38,7 +40,7 @@ fun CommentScreen(productId: String) {
                     Text(text = "Comments", fontSize = 20.sp)
                 },
                 navigationIcon = {
-                    IconButton(onClick = { /*TODO*/ }) {
+                    IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
                             imageVector = Icons.Default.ArrowBackIosNew,
                             contentDescription = "onBack"
