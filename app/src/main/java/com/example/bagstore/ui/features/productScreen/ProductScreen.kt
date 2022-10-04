@@ -43,6 +43,8 @@ import dev.burnoo.cokoin.navigation.getNavController
 import dev.burnoo.cokoin.viewmodel.getViewModel
 import org.koin.core.parameter.parametersOf
 import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.icons.filled.ArrowBackIos
+import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.runtime.*
 import androidx.navigation.NavHostController
 import com.example.bagstore.model.data.Comment
@@ -86,7 +88,7 @@ fun ProductScreen(productId: String) {
                         /*onBackPressed!!.onBackPressedDispatcher.onBackPressed()*/
                     }) {
                         Icon(
-                            imageVector = Icons.Default.ArrowBack,
+                            imageVector = Icons.Default.ArrowBackIosNew,
                             contentDescription = "onBackToMainScreen"
                         )
                     }
