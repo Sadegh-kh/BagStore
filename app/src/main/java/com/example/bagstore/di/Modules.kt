@@ -14,6 +14,7 @@ import com.example.bagstore.model.repository.product.ProductRepositoryImp
 import com.example.bagstore.model.repository.user.UserRepository
 import com.example.bagstore.model.repository.user.UserRepositoryImp
 import com.example.bagstore.ui.features.categoryScreen.CategoryScreenViewModel
+import com.example.bagstore.ui.features.commentScreen.CommentScreenViewModel
 import com.example.bagstore.ui.features.mainScreen.MainScreenViewModel
 import com.example.bagstore.ui.features.productScreen.ProductScreenViewModel
 import com.example.bagstore.ui.features.signInScreen.SignInViewModel
@@ -100,5 +101,6 @@ val myModules= module {
     viewModel { (categoryName:String)->CategoryScreenViewModel(categoryName,get()) }
 
     viewModel { (productId:String)->ProductScreenViewModel(productId,get(),get()) }
+    viewModel { (productId:String)->CommentScreenViewModel(productId,get()) }
 
 }
