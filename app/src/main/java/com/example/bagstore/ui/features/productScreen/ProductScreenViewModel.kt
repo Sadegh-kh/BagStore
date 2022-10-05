@@ -20,7 +20,7 @@ class ProductScreenViewModel(
     val productState = mutableStateOf<Product>(ProductEmpty)
     val commentListState = mutableStateOf<List<Comment>>(listOf())
     val dialogVisibilityState = mutableStateOf(false)
-    val textFieldState = mutableStateOf("")
+    val textCommentState = mutableStateOf("")
 
     init {
         getProductData(productId)
@@ -39,7 +39,7 @@ class ProductScreenViewModel(
         commentListState.value=commentList
     }
 
-    private fun addNewComment(productId: String,comment:String,resultMessage:(String)->Unit){
+    fun addNewComment(productId: String,comment:String,resultMessage:(String)->Unit){
         viewModelScope.launch(context = coroutineExceptionHandler) {
             commentRepository.addNewComment(productId,comment,resultMessage)
         }
