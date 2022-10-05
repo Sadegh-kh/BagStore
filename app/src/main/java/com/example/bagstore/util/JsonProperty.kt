@@ -5,4 +5,5 @@ object JsonProperty {
     const val EMAIL="email"
     const val PASSWORD="password"
     const val PRODUCT_ID="productId"
+    const val COMMENT="comment"
 }

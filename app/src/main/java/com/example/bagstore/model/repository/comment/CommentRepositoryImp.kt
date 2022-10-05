@@ -18,4 +18,21 @@ class CommentRepositoryImp(private val apiService: ApiService) : CommentReposito
         }
         return listOf()
     }
+
+    override suspend fun addNewComment(
+        productId: String,
+        text: String,
+        isSuccess: (String) -> Unit
+    ) {
+        val commentAsJson=JsonObject().apply {
+            addProperty(JsonProperty.PRODUCT_ID,productId)
+            addProperty(JsonProperty.COMMENT,text)
+        }
+        val response=apiService.addNewComment(commentAsJson)
+        if (response.success){
+            isSuccess(response.message)
+        }else{
+            isSuccess("failed")
+        }
+    }
 }
