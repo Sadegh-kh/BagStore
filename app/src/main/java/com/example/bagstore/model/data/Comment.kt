@@ -9,3 +9,7 @@ data class Comment(
     val text: String,
     val userEmail: String
 )
+data class AddNewCommentResponse(
+    val success: Boolean,
+    val message:String
+)
