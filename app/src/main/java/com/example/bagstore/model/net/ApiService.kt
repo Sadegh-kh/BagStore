@@ -29,5 +29,8 @@ interface ApiService {
     @POST("getComments")
     suspend fun getAllComment(@Body productId:JsonObject):CommentResponse
 
+    @POST("addNewComment")
+    suspend fun addNewComment(@Body newCommentJson:JsonObject):AddNewCommentResponse
+
 
 }
