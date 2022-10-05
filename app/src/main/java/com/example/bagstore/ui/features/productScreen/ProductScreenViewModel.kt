@@ -39,4 +39,10 @@ class ProductScreenViewModel(
         commentListState.value=commentList
     }
 
+    private fun addNewComment(productId: String,comment:String,resultMessage:(String)->Unit){
+        viewModelScope.launch(context = coroutineExceptionHandler) {
+            commentRepository.addNewComment(productId,comment,resultMessage)
+        }
+    }
+
 }
