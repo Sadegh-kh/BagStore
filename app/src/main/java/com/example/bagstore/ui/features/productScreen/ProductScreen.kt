@@ -1,6 +1,7 @@
 package com.example.bagstore.ui.features.productScreen
 
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.findViewTreeOnBackPressedDispatcherOwner
 import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -14,7 +15,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.*
@@ -43,12 +43,11 @@ import dev.burnoo.cokoin.navigation.getNavController
 import dev.burnoo.cokoin.viewmodel.getViewModel
 import org.koin.core.parameter.parametersOf
 import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.icons.filled.ArrowBackIos
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.runtime.*
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import com.example.bagstore.model.data.Comment
-import okhttp3.internal.indexOfFirstNonAsciiWhitespace
 
 @ExperimentalMaterial3Api
 @Composable
@@ -70,6 +69,8 @@ fun ProductScreen(productId: String) {
         parameters = { parametersOf(productId) }
 
     )
+
+    val context = LocalContext.current
 
     Scaffold(
 
@@ -163,7 +164,13 @@ fun ProductScreen(productId: String) {
 
             Divider()
 
-            ProductComments(viewModel, navController)
+            ProductComments(viewModel, navController,
+                addNewCommentClicked = {
+                    viewModel.addNewComment(productId = productId, viewModel.textCommentState.value,
+                        resultMessage = {
+                            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+                        })
+                })
         }
 
     }
@@ -171,7 +178,11 @@ fun ProductScreen(productId: String) {
 
 @ExperimentalMaterial3Api
 @Composable
-fun ProductComments(viewModel: ProductScreenViewModel, navController: NavHostController) {
+fun ProductComments(
+    viewModel: ProductScreenViewModel,
+    navController: NavHostController,
+    addNewCommentClicked: () -> Unit
+) {
 
     //add new comment dialog
     val dialogVisibility = viewModel.dialogVisibilityState
@@ -195,8 +206,8 @@ fun ProductComments(viewModel: ProductScreenViewModel, navController: NavHostCon
                     fontSize = 20.sp,
                     style = androidx.compose.material3.MaterialTheme.typography.titleMedium
                 )
-                OutlinedTextField(value = viewModel.textFieldState.value,
-                    onValueChange = { viewModel.textFieldState.value = it },
+                OutlinedTextField(value = viewModel.textCommentState.value,
+                    onValueChange = { viewModel.textCommentState.value = it },
                     modifier = Modifier
                         .fillMaxWidth(0.9f)
                         .padding(top = 8.dp),
@@ -213,7 +224,8 @@ fun ProductComments(viewModel: ProductScreenViewModel, navController: NavHostCon
                     TextButton(onClick = { dialogVisibility.value = false }) {
                         Text(text = "Cancel")
                     }
-                    TextButton(onClick = { /*TODO*/ }) {
+                    TextButton(onClick = { addNewCommentClicked.invoke()
+                    dialogVisibility.value=false}) {
                         Text(text = "Ok")
                     }
 
