@@ -164,10 +164,10 @@ fun ProductScreen(productId: String) {
 
             Divider()
 
-            ProductComments(viewModel, navController,
+            ProductComments(viewModel, navController, productId,
                 addNewCommentClicked = {
                     viewModel.addNewComment(productId = productId, viewModel.textCommentState.value,
-                        resultMessage = {
+                        messageResult = {
                             Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
                         })
                 })
@@ -181,6 +181,7 @@ fun ProductScreen(productId: String) {
 fun ProductComments(
     viewModel: ProductScreenViewModel,
     navController: NavHostController,
+    productId: String,
     addNewCommentClicked: () -> Unit
 ) {
 
@@ -224,8 +225,11 @@ fun ProductComments(
                     TextButton(onClick = { dialogVisibility.value = false }) {
                         Text(text = "Cancel")
                     }
-                    TextButton(onClick = { addNewCommentClicked.invoke()
-                    dialogVisibility.value=false}) {
+                    TextButton(onClick = {
+                        addNewCommentClicked.invoke()
+                        viewModel.refreshCommendList(productId)
+                        dialogVisibility.value = false
+                    }) {
                         Text(text = "Ok")
                     }
 
@@ -234,6 +238,7 @@ fun ProductComments(
             }
         }
     }
+
 
     val commentList = viewModel.commentListState.value
 

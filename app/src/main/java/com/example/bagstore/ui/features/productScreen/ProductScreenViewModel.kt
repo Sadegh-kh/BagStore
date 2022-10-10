@@ -29,19 +29,26 @@ class ProductScreenViewModel(
     private fun getProductData(productId: String) {
         viewModelScope.launch(context = coroutineExceptionHandler) {
             val product = async { productRepository.getProductById(productId) }
-            val comments = async{ commentRepository.getAllComment(productId) }
-            loadData(product.await(),comments.await())
+            val comments = async { commentRepository.getAllComment(productId) }
+            loadData(product.await(), comments.await())
         }
     }
 
-    private fun loadData(product: Product, commentList: List<Comment>) {
-        productState.value=product
-        commentListState.value=commentList
+    fun refreshCommendList(productId: String) {
+        viewModelScope.launch(context = coroutineExceptionHandler) {
+            commentListState.value = commentRepository.getAllComment(productId)
+        }
+
     }
 
-    fun addNewComment(productId: String,comment:String,resultMessage:(String)->Unit){
+    private fun loadData(product: Product, commentList: List<Comment>) {
+        productState.value = product
+        commentListState.value = commentList
+    }
+
+    fun addNewComment(productId: String, comment: String, messageResult: (String) -> Unit) {
         viewModelScope.launch(context = coroutineExceptionHandler) {
-            commentRepository.addNewComment(productId,comment,resultMessage)
+            commentRepository.addNewComment(productId, comment, messageResult)
         }
     }
 
